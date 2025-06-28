@@ -24,5 +24,4 @@ __pycache__/
 .env
 
 # For research paper data
-data/raw_pdfs/
-data/results/
+data/
