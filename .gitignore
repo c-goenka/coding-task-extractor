@@ -22,3 +22,7 @@ __pycache__/
 
 # For API key
 .env
+
+# For research paper data
+data/raw_pdfs/
+data/results/
