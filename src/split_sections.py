@@ -10,21 +10,23 @@ import json
 
 def split_into_sections(text_path, output_path):
     section_dict = {}
-    with open(text_path, 'r') as text:
-        buffer = ""
-        cur_section = "header"
-        for line in text:
+    cur_section = "header"
+    buffer = ""
+
+    with open(text_path, 'r', encoding="utf-8") as file:
+        for line in file:
             line = line.strip()
             if line.isupper():
-                section_dict[cur_section] = buffer
+                if buffer.strip():
+                    section_dict[cur_section] = buffer.strip()
                 cur_section = line.lower()
                 buffer = ""
-            else:
-                buffer += line
-        if buffer: section_dict[cur_section] = buffer
+            elif line:
+                buffer += " " + line
+        if buffer.strip(): section_dict[cur_section] = buffer.strip()
 
-    with open(output_path, 'w') as dir:
-        json.dump(section_dict, dir, indent=2)
+    with open(output_path, 'w', encoding="utf-8") as file:
+        json.dump(section_dict, file, indent=2)
 
 
 def main():
