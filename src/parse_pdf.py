@@ -1,28 +1,32 @@
 import pymupdf
 from pathlib import Path
+import json
+
 
 def extract_pdf_text(pdf_path, output_path):
-    with pymupdf.open(pdf_path) as doc:
-        pages_text = [page.get_text() for page in doc] # type: ignore
-        full_text = '\f'.join(pages_text)
-        output_path.write_text(full_text, encoding="utf-8")
+    with pymupdf.open(pdf_path) as paper_pdf:
+        page_texts = [page.get_text() for page in paper_pdf] # type: ignore
+        paper_text = '\f'.join(page_texts)
+        output_path.write_text(paper_text, encoding="utf-8")
 
 
 def main():
-    pdf_folder = Path("data/raw_pdfs")
-    output_folder = Path("data/extracted_texts")
 
-    pdf_files = list(pdf_folder.glob("*.pdf"))
+    with open('../data/papers_dict.json', 'r') as f:
+        papers_dict = json.load(f)
 
-    for pdf_path in pdf_files:
-        output_path = output_folder / f"{pdf_path.stem}.txt"
+    for paper_id, metadata in papers_dict.items():
+        pdf_path = metadata['pdf_path']
+
+        output_folder = Path("data/parsed_texts")
+        output_path = output_folder / f'{paper_id}.txt'
 
         if output_path.exists():
-            print(f"Skipping: {output_path.name} (already processed)")
+            print(f'Skipping: {papers_dict.title} (already parsed)')
             continue
 
         extract_pdf_text(pdf_path, output_path)
-        print(f"Processed: {output_path.name}")
+        print(f'Parsed: {papers_dict.title}')
 
 
 if __name__ == "__main__":
