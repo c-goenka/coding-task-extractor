@@ -8,6 +8,7 @@ import json
 #     "acknoledgements", "Goal", "findings"
 # ]
 
+
 def split_into_sections(text_path, output_path):
     section_dict = {}
     cur_section = "header"
@@ -30,19 +31,19 @@ def split_into_sections(text_path, output_path):
 
 
 def main():
-    texts_folder = Path("data/processed_texts")
-    output_folder = Path("data/sectioned_texts")
+    parsed_texts_folder = Path("data/parsed_papers")
+    output_folder = Path("data/sectioned_papers")
 
-    text_files = list(texts_folder.glob("*.txt"))
+    parsed_texts = list(parsed_texts_folder.glob("*.txt"))
 
-    for text_path in text_files:
-        output_path = output_folder / f"{text_path.stem}.json"
+    for file_path in parsed_texts:
+        output_path = output_folder / f"{file_path.stem}.json"
 
         if output_path.exists():
             print(f"Skipped: {output_path.name} (already sectioned)")
             continue
 
-        split_into_sections(text_path, output_path)
+        split_into_sections(file_path, output_path)
         print(f"Sectioned: {output_path.name}")
 
 
