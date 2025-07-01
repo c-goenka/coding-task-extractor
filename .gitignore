@@ -26,3 +26,4 @@ __pycache__/
 # For research paper data
 data/parsed_papers
 data/sectioned_papers
+data/vector_store

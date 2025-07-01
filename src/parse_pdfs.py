@@ -5,7 +5,7 @@ import json
 
 def extract_pdf_text(pdf_path, output_path):
     with pymupdf.open(pdf_path) as paper_pdf:
-        page_texts = [page.get_text().strip() for page in paper_pdf] # type: ignore
+        page_texts = [page.get_text() for page in paper_pdf] # type: ignore
         paper_text = '\f'.join(page_texts)
         output_path.write_text(paper_text, encoding="utf-8")
 

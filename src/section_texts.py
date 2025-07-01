@@ -1,13 +1,6 @@
 from pathlib import Path
 import json
 
-# SECTION_NAMES = [
-#     "abstract", "introduction", "related work", "background", "method", "procedure",
-#     "study", "task", "evaluation", "experiment", "results", "findings", "discussion",
-#     "conclusion", "references", "future work", "limitations", "design", "participant",
-#     "acknoledgements", "Goal", "findings"
-# ]
-
 
 def split_into_sections(text_path, output_path):
     section_dict = {}
@@ -16,15 +9,13 @@ def split_into_sections(text_path, output_path):
 
     with open(text_path, 'r', encoding="utf-8") as file:
         for line in file:
-            line = line.strip()
             if line.isupper():
-                if buffer.strip():
-                    section_dict[cur_section] = buffer.strip()
-                cur_section = line.lower()
+                section_dict[cur_section] = buffer
+                cur_section = line.strip().lower()
                 buffer = ""
-            elif line:
-                buffer += " " + line
-        if buffer.strip(): section_dict[cur_section] = buffer.strip()
+            elif line.strip():
+                buffer += (" " + line) if buffer else line
+        section_dict[cur_section] = buffer
 
     with open(output_path, 'w', encoding="utf-8") as file:
         json.dump(section_dict, file, indent=2)
