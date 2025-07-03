@@ -1,6 +1,5 @@
 import json
 import pandas as pd
-from pathlib import Path
 
 class DataProcessor:
     def __init__(self, config):

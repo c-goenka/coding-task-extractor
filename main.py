@@ -20,7 +20,7 @@ class CodingTaskExtractor:
         self.csv_writer = CSVWriter(self.config)
 
     def run_pipeline(self, csv_file_path):
-        print("Starting RAG pipeline...")
+        print("Starting coding task extraction pipeline...")
 
         print("Processing papers metadata...")
         papers_dict = self.data_processor.process_papers(csv_file_path)
@@ -43,9 +43,9 @@ class CodingTaskExtractor:
         print("Saving results to CSV...")
         self.csv_writer.write_results_to_csv(papers_dict, results)
 
-        print(f"Pipeline completed!")
+        print("Pipeline completed!")
         return results
 
 if __name__ == "__main__":
     extractor = CodingTaskExtractor()
-    results = extractor.run_pipeline("data/chi_23_coding_papers.csv")
+    results = extractor.run_pipeline("chi_23_coding_papers.csv")
