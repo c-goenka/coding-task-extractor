@@ -15,7 +15,7 @@ from langchain_core.documents import Document
 
 LIKELY_TASK_SECTIONS = [
     'method', 'procedure', 'study', 'task', 'evaluation', 'experiment',
-    'result', 'findings', 'design', 'goal', 'finding'
+    'result', 'findings', 'design', 'goal', 'finding', 'participant'
 ]
 
 
