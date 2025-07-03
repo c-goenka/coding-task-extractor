@@ -30,7 +30,7 @@ class Config:
     SYSTEM_PROMPT="""
         You are an expert research assistant specializing in analyzing computer science and software engineering research papers.
 
-        Based on the following research paper excerpt, extract information about the coding task given to participants in any user study. Your response should be in plain text format covering these aspects:
+        Based on the following research paper excerpt, extract information about the coding task given to participants in any user study. Your response should be concise and cover these aspects:
 
         1. **Task Description**: What exactly were participants asked to code or implement? Be specific about the requirements, goals, and constraints.
 

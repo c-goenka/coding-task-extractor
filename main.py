@@ -6,6 +6,7 @@ from src.text_sectioner import TextSectioner
 from src.text_splitter import TextSplitter
 from src.embedder import Embedder
 from src.rag_extractor import RAGExtractor
+from src.csv_writer import CSVWriter
 
 class CodingTaskExtractor:
     def __init__(self):
@@ -16,6 +17,7 @@ class CodingTaskExtractor:
         self.text_splitter = TextSplitter(self.config)
         self.embedder = Embedder(self.config)
         self.rag_extractor = RAGExtractor(self.config)
+        self.csv_writer = CSVWriter(self.config)
 
     def run_pipeline(self, csv_file_path):
         print("Starting RAG pipeline...")
@@ -38,11 +40,10 @@ class CodingTaskExtractor:
         print("Extracting coding tasks...")
         results = self.rag_extractor.extract_all_tasks()
 
-        output_path = self.config.RESULT_DIR / "coding_tasks.json"
-        with open(output_path, 'w') as f:
-            json.dump(results, f, indent=4)
+        print("Saving results to CSV...")
+        self.csv_writer.write_results_to_csv(papers_dict, results)
 
-        print(f"Pipeline completed! Results saved to {output_path}")
+        print(f"Pipeline completed!")
         return results
 
 if __name__ == "__main__":

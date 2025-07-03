@@ -13,9 +13,14 @@ class PDFParser:
     def parse_all_pdfs(self, papers_dict):
         parsed_dir = self.config.PARSED_PAPER_DIR
 
+        i = 0
         for paper_id, metadata in papers_dict.items():
             output_path = parsed_dir / f'{paper_id}.txt'
             pdf_path = metadata['pdf_path']
+
+            i += 1
+            if i == 5:
+                break
 
             if output_path.exists():
                 continue
