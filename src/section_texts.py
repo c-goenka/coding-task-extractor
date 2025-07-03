@@ -22,20 +22,20 @@ def split_into_sections(text_path, output_path):
 
 
 def main():
-    parsed_texts_folder = Path("data/parsed_papers")
-    output_folder = Path("data/sectioned_papers")
+    parsed_texts_dir = Path("data/parsed_papers")
+    output_dir = Path("data/sectioned_papers")
 
-    parsed_texts = list(parsed_texts_folder.glob("*.txt"))
+    parsed_texts = parsed_texts_dir.iterdir()
 
-    for file_path in parsed_texts:
-        output_path = output_folder / f"{file_path.stem}.json"
+    for parsed_text_path in parsed_texts:
+        output_file_path = output_dir / f"{parsed_text_path.stem}.json"
 
-        if output_path.exists():
-            print(f"Skipped: {output_path.name} (already sectioned)")
+        if output_file_path.exists():
+            print(f"Skipped: {output_file_path.name} (already sectioned)")
             continue
 
-        split_into_sections(file_path, output_path)
-        print(f"Sectioned: {output_path.name}")
+        split_into_sections(parsed_text_path, output_file_path)
+        print(f"Sectioned: {output_file_path.name}")
 
 
 if __name__ == "__main__":

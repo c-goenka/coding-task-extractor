@@ -44,42 +44,53 @@ def split_text(likely_task_texts):
         chunk_overlap = 200
     )
 
-    all_splits = []
+    likely_task_splits = {}
 
     for paper_id, sections in likely_task_texts.items():
+        likely_task_splits[paper_id] = []
+
         for section_name, section_text in sections.items():
             section_splits = text_splitter.split_text(section_text)
-            for i, split in enumerate(section_splits):
-                all_splits.append({
+
+            for chunk_index, split in enumerate(section_splits):
+                likely_task_splits[paper_id].append({
                     'content' : split,
                     'metadata' : {
-                        'paper_id' : paper_id,
                         'section' : section_name,
-                        'chunk_index' : i,
+                        'chunk_index' : chunk_index
                     }
                 })
 
-    return all_splits
+    return likely_task_splits
 
 
-def embed_chunks(all_splits):
-    docs = [Document(page_content=split['content'], metadata=split['metadata']) for split in all_splits]
-
+def embed_chunks(likely_task_splits):
     embedding_model = OpenAIEmbeddings(model="text-embedding-3-small")
-    vector_store = FAISS.from_documents(docs, embedding_model)
-    vector_store.save_local("data/vector_store/")
+
+    for paper_id, paper_splits in likely_task_splits.items():
+        docs = [
+            Document(page_content=split['content'], metadata=split['metadata']) for split in paper_splits
+        ]
+        vector_store = FAISS.from_documents(docs, embedding_model)
+        vector_store.save_local(f'data/vector_stores/{paper_id}/')
+        print(f'Split: {paper_id}')
 
 
 def main():
     sectioned_papers_folder = Path('data/sectioned_papers')
-    sectioned_papers = list(sectioned_papers_folder.glob('*.json'))
+    sectioned_papers = sectioned_papers_folder.iterdir()
 
     likely_task_texts = {}
     for paper in sectioned_papers:
+
+        if Path(f'data/vector_stores/{paper.stem}/').exists():
+            print(f'Skipped: {paper.stem} (already split)')
+            continue
+
         likely_task_texts[paper.stem] = select_sections(paper)
 
-    all_splits = split_text(likely_task_texts)
-    embed_chunks(all_splits)
+    likely_task_splits = split_text(likely_task_texts)
+    embed_chunks(likely_task_splits)
 
 
 if __name__ == '__main__':

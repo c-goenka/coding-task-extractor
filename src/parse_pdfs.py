@@ -22,14 +22,14 @@ def main():
         if i == 5:
             break
 
-        output_folder = Path("data/parsed_papers")
-        output_path = output_folder / f'{paper_id}.txt'
+        output_dir = Path("data/parsed_papers")
+        output_file_path = output_dir / f'{paper_id}.txt'
 
-        if output_path.exists():
+        if output_file_path.exists():
             print(f'Skipping: {metadata['title']} (already parsed)')
             continue
 
-        extract_pdf_text(pdf_path, output_path)
+        extract_pdf_text(pdf_path, output_file_path)
         print(f'Parsed: {metadata['title']}')
 
 
