@@ -18,7 +18,7 @@ class Embedder:
 
     def embed_all_splits(self):
         split_dir = self.config.SPLIT_TEXT_DIR
-        vector_store_dir = self.config.VECTOR_STORES_DIR
+        vector_store_dir = self.config.VECTOR_STORE_DIR
         split_texts = split_dir.iterdir()
 
         for split_path in split_texts:

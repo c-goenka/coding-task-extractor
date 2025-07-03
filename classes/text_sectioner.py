@@ -41,8 +41,8 @@ class TextSectioner:
             json.dump(section_dict, f, indent=4)
 
     def section_all_papers(self):
-        parsed_dir = self.config.PARSED_PAPERS_DIR
-        sectioned_dir = self.config.SECTIONED_PAPERS_DIR
+        parsed_dir = self.config.PARSED_PAPER_DIR
+        sectioned_dir = self.config.SECTIONED_PAPER_DIR
 
         parsed_papers = parsed_dir.iterdir()
 

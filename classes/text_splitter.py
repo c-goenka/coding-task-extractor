@@ -31,7 +31,7 @@ class TextSplitter:
             json.dump(splits, f, indent=4)
 
     def split_all_texts(self):
-        sectioned_dir = self.config.SECTIONED_PAPERS_DIR
+        sectioned_dir = self.config.SECTIONED_PAPER_DIR
         split_dir = self.config.SPLIT_TEXT_DIR
         sectioned_texts = sectioned_dir.iterdir()
 
