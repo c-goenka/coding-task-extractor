@@ -47,4 +47,4 @@ class CodingTaskExtractor:
 
 if __name__ == "__main__":
     extractor = CodingTaskExtractor()
-    results = extractor.run_pipeline("chi_23_coding_papers.csv")
+    results = extractor.run_pipeline("data/chi_23_coding_papers.csv")

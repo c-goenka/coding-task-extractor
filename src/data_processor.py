@@ -13,7 +13,7 @@ class DataProcessor:
             'Key' : 'paper_id',
             'Title' : 'title',
             'Author' : 'authors',
-            'Publication Title' : 'title',
+            'Publication Title' : 'venue',
             'Publication Year' : 'year',
             'ISBN' : 'isbn',
             'Url' : 'url',
@@ -21,12 +21,12 @@ class DataProcessor:
             'File Attachments' : 'pdf_path'
         }
 
-        papers_df.rename(columns=column_rename_mapping)
+        papers_df.rename(columns=column_rename_mapping, inplace=True)
 
         keyword_filter = '|'.join(self.config.FILTER_KEYWORDS)
         papers_df = papers_df[papers_df['abstract'].str.contains(keyword_filter)]
 
-        selected_columns = list(column_rename_mapping.keys())
+        selected_columns = ['paper_id', 'title', 'authors', 'venue', 'year', 'isbn', 'url', 'abstract', 'pdf_path']
         papers_dict = papers_df[selected_columns].set_index('paper_id').to_dict(orient='index')
 
         output_path = self.config.DATA_DIR / "papers_dict.json"
