@@ -15,10 +15,8 @@ class PDFParser:
 
         for paper_id, metadata in papers_dict.items():
             output_path = parsed_dir / f'{paper_id}.txt'
+            pdf_path = metadata['pdf_path']
 
             if output_path.exists():
-                print(f"Skipping: {metadata['title']} (already parsed)")
                 continue
-
-            pdf_path = metadata['pdf_path']
             self.parse_pdf(pdf_path, output_path)

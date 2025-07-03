@@ -6,7 +6,6 @@ class TextSectioner:
         self.config = config
         self.fuzzy_match_scorer = fuzz.partial_ratio
         self.fuzzy_match_pre_processor = utils.default_process
-        self.fuzzy_match_threshold = 60
 
     def is_task_section(self, section_name):
         score = process.extractOne(
@@ -15,14 +14,14 @@ class TextSectioner:
             scorer=self.fuzzy_match_scorer,
             processor=self.fuzzy_match_pre_processor
         )
-        return score[1] >= self.fuzzy_match_threshold
+        return score[1] >= self.config.FUZZY_MATCH_THRESHOLD
 
-    def section_paper(self, text_path, output_path):
+    def section_paper(self, paper_path, output_path):
         section_dict = {}
         cur_section = "header"
         buffer = ""
 
-        with open(text_path, 'r', encoding="utf-8") as file:
+        with open(paper_path, 'r', encoding="utf-8") as file:
             for line in file:
                 if line.isupper():
                     if self.is_task_section(cur_section):
@@ -47,11 +46,9 @@ class TextSectioner:
 
         parsed_papers = parsed_dir.iterdir()
 
-        for text_path in parsed_papers:
-            output_path = sectioned_dir / f'{text_path.stem}.json'
+        for paper_path in parsed_papers:
+            output_path = sectioned_dir / f'{paper_path.stem}.json'
 
             if output_path.exists():
-                print(f"Skipped: {output_path.name} (already sectioned)")
                 continue
-
-            self.section_paper(text_path, output_path)
+            self.section_paper(paper_path, output_path)
