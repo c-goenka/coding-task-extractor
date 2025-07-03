@@ -10,7 +10,7 @@ from langchain_core.documents import Document
 #     "abstract", "introduction", "related work", "background", "method", "procedure",
 #     "study", "task", "evaluation", "experiment", "results", "findings", "discussion",
 #     "conclusion", "references", "future work", "limitations", "design", "participant",
-#     "acknoledgements", "Goal", "findings"
+#     "acknoledgements", "goal", "findings"
 # ]
 
 LIKELY_TASK_SECTIONS = [
