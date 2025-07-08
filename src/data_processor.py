@@ -22,7 +22,10 @@ class DataProcessor:
         papers_df = papers_df.rename(columns=self.column_rename_mapping)
 
         keyword_filter = '|'.join(self.config.FILTER_KEYWORDS)
+        original_length = len(papers_df)
         papers_df = papers_df[papers_df['abstract'].str.contains(keyword_filter, case=False, na=False)]
+
+        print(f'Selected {len(papers_df)} papers out of {original_length} in CHI 23 papers')
 
         papers_dict = papers_df[self.selected_columns].set_index('paper_id').to_dict(orient='index')
 

@@ -5,7 +5,7 @@ class CSVWriter:
         self.config = config
 
     def write_results_to_csv(self, papers_dict, extraction_results):
-        output_path = self.config.RESULT_DIR / "coding_tasks_results.csv"
+        output_path = self.config.RESULT_DIR / f"results_chi_23.csv"
 
         with open(output_path, 'w', newline='', encoding='utf-8') as csv_file:
             fieldnames = [
