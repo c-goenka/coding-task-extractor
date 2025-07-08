@@ -4,18 +4,20 @@ class CSVWriter:
     def __init__(self, config):
         self.config = config
 
-    def write_results_to_csv(self, papers_dict, extraction_results):
+    def write_results_to_csv(self, papers_dict, coding_tasks, categorized_results):
         output_path = self.config.RESULT_DIR / f"results_chi_23.csv"
 
         with open(output_path, 'w', newline='', encoding='utf-8') as csv_file:
             fieldnames = [
                 'paper_id', 'title', 'authors', 'venue', 'year',
-                'isbn', 'url', 'abstract', 'coding_task'
+                'isbn', 'url', 'abstract', 'coding_task',
+                'task_summary', 'skill_level', 'programming_language',
+                'programming_domain', 'task_type'
             ]
             writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
             writer.writeheader()
 
-            for paper_id, task_description in extraction_results.items():
+            for paper_id, task_categories in categorized_results.items():
                 if paper_id in papers_dict:
                     paper_metadata = papers_dict[paper_id]
                     writer.writerow({
@@ -27,7 +29,12 @@ class CSVWriter:
                         'isbn': paper_metadata.get('isbn', ''),
                         'url': paper_metadata.get('url', ''),
                         'abstract': paper_metadata.get('abstract', ''),
-                        'coding_task': task_description
+                        'coding_task': coding_tasks[paper_id],
+                        'task_summary' : task_categories['task_summary'],
+                        'skill_level' : task_categories['skill_level'],
+                        'programming_language' : task_categories['programming_language'],
+                        'programming_domain' : task_categories['programming_domain'],
+                        'task_type' : task_categories['task_type']
                     })
 
         print(f"Results saved to: {output_path}")

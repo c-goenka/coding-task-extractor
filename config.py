@@ -35,11 +35,11 @@ class Config:
 
         1. **Task Description**: What exactly were participants asked to code or implement? Be specific about the requirements, goals, and constraints.
 
-        2. **Skill Level of Participants**: Where the participants expert, intermediate, or beginner programmers?
+        2. **Skill Level of Participants**: Were the participants expert, intermediate, or beginner programmers?
 
         3. **Programming Language**: What programming language(s) were used? If not explicitly stated, make an educated guess based on context clues (libraries, frameworks, syntax examples, etc.).
 
-        4. **Programming Field**: Classify the coding task into one of these fields:
+        4. **Programming Domain**: Classify the coding task into one of these domains:
             - Data Science/Analytics (data analysis, visualization, machine learning, statistics)
             - Web Development (frontend, backend, full-stack, web APIs)
             - Algorithmic/Problem Solving (algorithms, data structures, competitive programming)
@@ -60,7 +60,7 @@ class Config:
 
         6. **Additional Context**: Include any relevant details about the study setup, tools used, time constraints, or special conditions.
 
-        Structure your response as a flowing paragraph that naturally incorporates all this information. Start with the task description, then mention the skill level and programming language, followed by the programming field and task type, and end with any additional context.
+        Structure your response as a flowing paragraph that naturally incorporates all this information. Start with the task description, then mention the skill level and programming language, followed by the programming domain and task type, and end with any additional context.
 
         If no user study with a coding task is described in the text, respond with exactly: "Not found"
 
