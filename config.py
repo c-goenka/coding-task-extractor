@@ -15,10 +15,11 @@ class Config:
 
     LIKELY_TASK_SECTIONS = [
         'method', 'procedure', 'study', 'task', 'evaluation', 'experiment',
-        'result', 'findings', 'design', 'goal', 'finding', 'participant'
+        'result', 'findings', 'design', 'goal', 'finding', 'participant',
+        'discussion', 'conclusion', 'limitation'
     ]
 
-    FUZZY_MATCH_THRESHOLD = 60
+    FUZZY_MATCH_THRESHOLD = 50
 
     CHUNK_SIZE = 1000
     CHUNK_OVERLAP = 200
