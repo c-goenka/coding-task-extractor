@@ -5,7 +5,7 @@ class CSVWriter:
         self.config = config
 
     def write_results_to_csv(self, papers_dict, coding_tasks, categorized_results):
-        output_path = self.config.RESULT_DIR / f"results_chi_23.csv"
+        output_path = self.config.RESULT_DIR / f"results_chi_25.csv"
 
         with open(output_path, 'w', newline='', encoding='utf-8') as csv_file:
             fieldnames = [
@@ -38,3 +38,31 @@ class CSVWriter:
                     })
 
         print(f"Results saved to: {output_path}")
+
+    def write_results_to_csv_intermediate(self, papers_dict, coding_tasks):
+        output_path = self.config.RESULT_DIR / f"results_chi_25_intermediate.csv"
+
+        with open(output_path, 'w', newline='', encoding='utf-8') as csv_file:
+            fieldnames = [
+                'paper_id', 'title', 'authors', 'venue', 'year',
+                'isbn', 'url', 'abstract', 'coding_task'
+            ]
+            writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+            writer.writeheader()
+
+            for paper_id, task_description in coding_tasks.items():
+                if paper_id in papers_dict:
+                    paper_metadata = papers_dict[paper_id]
+                    writer.writerow({
+                        'paper_id': paper_id,
+                        'title': paper_metadata.get('title', ''),
+                        'authors': paper_metadata.get('authors', ''),
+                        'venue': paper_metadata.get('venue', ''),
+                        'year': paper_metadata.get('year', ''),
+                        'isbn': paper_metadata.get('isbn', ''),
+                        'url': paper_metadata.get('url', ''),
+                        'abstract': paper_metadata.get('abstract', ''),
+                        'coding_task': task_description,
+                    })
+
+        print(f"Intermediate results saved to: {output_path}")

@@ -1,4 +1,3 @@
-import json
 from config import Config
 from src.data_processor import DataProcessor
 from src.pdf_parser import PDFParser
@@ -42,8 +41,20 @@ class CodingTaskExtractor:
         print("Extracting coding tasks...")
         coding_tasks = self.rag_extractor.extract_all_tasks()
 
+        na_count = 0
+        for paper_id, task_description in coding_tasks.items():
+            if task_description == 'Not found':
+                na_count += 1
+
+        print(f'Number of EXTRACTED coding tasks: {len(coding_tasks) - na_count}')
+
+        print("Saving intermediate results to CSV...")
+        self.csv_writer.write_results_to_csv_intermediate(papers_dict, coding_tasks)
+
         print("Categorizing tasks...")
         results = self.task_categorizer.categorize_all_tasks(coding_tasks)
+
+        print(f'Number of CATEGORIZED coding tasks: {len(results)}')
 
         print("Saving results to CSV...")
         self.csv_writer.write_results_to_csv(papers_dict, coding_tasks, results)
@@ -53,4 +64,4 @@ class CodingTaskExtractor:
 
 if __name__ == "__main__":
     extractor = CodingTaskExtractor()
-    results = extractor.run_pipeline("chi_23_coding_papers.csv")
+    results = extractor.run_pipeline("chi_25_coding.csv")

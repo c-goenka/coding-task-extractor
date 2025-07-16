@@ -7,10 +7,29 @@ class TextSectioner:
         self.fuzzy_match_scorer = fuzz.partial_ratio
         self.fuzzy_match_pre_processor = utils.default_process
 
-    def is_task_section(self, section_name):
+    def calculate_keyword_density(self, text):
+        if not text or len(text) < 50:  # Skip very short texts
+            return 0.0
+
+        text_lower = text.lower()
+        total_words = len(text_lower.split())
+
+        if total_words == 0:
+            return 0.0
+
+        keyword_count = 0
+        for keyword in self.config.FILTER_KEYWORDS:
+            keyword_count += text_lower.count(keyword.lower())
+
+        return keyword_count / total_words
+
+    def is_skip_section(self, section_name):
+        if section_name in self.config.SKIP_SECTIONS:
+            return True
+
         score = process.extractOne(
             section_name,
-            self.config.LIKELY_TASK_SECTIONS,
+            self.config.SKIP_SECTIONS,
             scorer=self.fuzzy_match_scorer,
             processor=self.fuzzy_match_pre_processor
         )
@@ -23,19 +42,31 @@ class TextSectioner:
 
         with open(paper_path, 'r', encoding="utf-8") as file:
             for line in file:
-                if line.isupper():
-                    if self.is_task_section(cur_section):
+                line = line.strip()
+                if line.isupper() or (line.lower() in self.config.SECTION_NAMES):
+                    keyword_density = self.calculate_keyword_density(buffer)
+
+                    if (len(buffer) > self.config.LARGE_SECTION_THRESHOLD or
+                        keyword_density > self.config.KEYWORD_DENSITY_THRESHOLD or
+                        not self.is_skip_section(cur_section)):
                         section_dict[cur_section] = buffer
+
                     cur_section = line.strip().lower()
                     buffer = ""
-                elif line.strip():
+                elif line:
                     buffer += (" " + line) if buffer else line
 
-        if buffer.strip() and self.is_task_section(cur_section):
+        if buffer.strip() and not self.is_skip_section(cur_section):
             section_dict[cur_section] = buffer
 
         if not section_dict:
             return
+
+        # # For CHI '25 papers
+        # keyword_filter = '|'.join(self.config.FILTER_KEYWORDS)
+        # if "abstract" in section_dict:
+        #     if not section_dict['abstract'].contains(keyword_filter, case=False, na=False):
+        #         return
 
         with open(output_path, 'w', encoding="utf-8") as f:
             json.dump(section_dict, f, indent=4)

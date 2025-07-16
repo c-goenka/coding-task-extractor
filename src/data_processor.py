@@ -1,5 +1,6 @@
 import json
 import pandas as pd
+import numpy as np
 
 class DataProcessor:
     def __init__(self, config):
@@ -23,9 +24,14 @@ class DataProcessor:
 
         keyword_filter = '|'.join(self.config.FILTER_KEYWORDS)
         original_length = len(papers_df)
-        papers_df = papers_df[papers_df['abstract'].str.contains(keyword_filter, case=False, na=False)]
 
-        print(f'Selected {len(papers_df)} papers out of {original_length} in CHI 23 papers')
+        papers_df['abstract'] = papers_df['abstract'].replace('', np.nan)
+
+        print("Number of papers with no abstract:", papers_df['abstract'].isna().sum())
+
+        papers_df = papers_df[papers_df['abstract'].str.contains(keyword_filter, case=False, na=True)]
+
+        print(f'Selected {len(papers_df)} papers out of {original_length} in CHI 24 papers')
 
         papers_dict = papers_df[self.selected_columns].set_index('paper_id').to_dict(orient='index')
 

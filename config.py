@@ -9,17 +9,64 @@ class Config:
     RESULT_DIR = DATA_DIR / 'results'
 
     FILTER_KEYWORDS = [
-        'user', 'study', 'participant', 'subject',
-        'eval', 'experiment', 'trial', 'test'
+        # Core study terms
+        'user', 'study', 'participant', 'subject', 'volunteer',
+        'experiment', 'trial', 'test', 'eval', 'evaluation', 'assess',
+
+        # Human subjects and participants
+        'human', 'people', 'person', 'individual', 'recruit', 'recruited',
+        'developer', 'programmer', 'coder', 'student', 'professional',
+
+        # Study types and methodologies
+        'empirical', 'qualitative', 'quantitative', 'survey', 'interview',
+        'observation', 'case study', 'field study', 'lab study',
+        'controlled study', 'randomized', 'within-subject', 'between-subject',
+
+        # Task-related terms
+        'task', 'assignment', 'exercise', 'problem', 'challenge',
+        'implementation', 'coding', 'programming', 'development',
+        'debug', 'refactor', 'review', 'write code', 'software',
+
+        # Research methods
+        'methodology', 'protocol', 'procedure', 'design', 'analysis',
+        'data collection', 'measurement', 'metric', 'performance',
+        'usability', 'user experience', 'effectiveness', 'efficiency',
+
+        # Study conditions and comparisons
+        'condition', 'treatment', 'control', 'baseline', 'comparison',
+        'group', 'cohort', 'sample', 'population',
+
+        # Common study verbs
+        'conducted', 'performed', 'administered', 'collected', 'measured',
+        'observed', 'recorded', 'analyzed', 'compared', 'investigated',
+
+        # Tools and environments
+        'IDE', 'editor', 'environment', 'tool', 'platform', 'system',
+        'interface', 'workspace',
+
+        # Results and findings
+        'result', 'finding', 'outcome', 'effect', 'impact', 'influence',
+        'correlation', 'significant', 'evidence'
     ]
 
-    LIKELY_TASK_SECTIONS = [
-        'method', 'procedure', 'study', 'task', 'evaluation', 'experiment',
-        'result', 'findings', 'design', 'goal', 'finding', 'participant',
-        'discussion', 'conclusion', 'limitation'
+    SECTION_NAMES = [
+        "abstract", "introduction", "intro", "motivation", "background", "problem statement",
+        "related work", "literature review", "method", "methodology", "study", "user study",
+        "study design", "experimental setup", "participants", "procedure", "tasks", "task design",
+        "materials", "apparatus", "implementation", "system", "system design", "system overview",
+        "design goals", "evaluation", "user testing", "results", "findings", "analysis",
+        "discussion", "limitations", "future work", "conclusion", "summary", "references",
+        "acknowledgments", "bibliography", "appendix"
+    ]
+
+    SKIP_SECTIONS = [
+        "introduction", "motivation", "background", "related work", "literature review", "appendix"
+        "problem statement", "future work", "references", "acknowledgments", "bibliography"
     ]
 
     FUZZY_MATCH_THRESHOLD = 50
+    LARGE_SECTION_THRESHOLD = 2000  # Keep sections larger than this even if in skip list
+    KEYWORD_DENSITY_THRESHOLD = 0.02  # Keep sections with >2% keyword density
 
     CHUNK_SIZE = 1000
     CHUNK_OVERLAP = 200

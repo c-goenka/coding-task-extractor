@@ -25,4 +25,6 @@ __pycache__/
 
 # For research paper data
 data/
-chi_23_coding_papers.csv
+chi_23_coding.csv
+chi_24_coding.csv
+chi_25_coding.csv

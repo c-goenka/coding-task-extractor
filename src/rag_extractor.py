@@ -31,7 +31,7 @@ class RAGExtractor:
         )
 
         relevant_docs = vector_store.similarity_search(
-            "Coding task performed by participants in the user study"
+            "coding or programming task performed by participants in user study or evaluation"
         )
 
         context = "\n\n".join([doc.page_content for doc in relevant_docs])

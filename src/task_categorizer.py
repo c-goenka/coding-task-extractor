@@ -40,14 +40,17 @@ class TaskCategorizer:
             - Software Engineering (debugging, refactoring, testing, code review)
             - Other (specify what field)
 
-        5. **Task Type**: Classify the coding task based on the type of activity participants performed:
-            - Debugging (Example: Fix a set of bugs in a JavaScript app)
-            - Implementation (Example: Add a feature to a React component)
-            - Code Reading (Example: Understand a Python function and answer questions)
-            - Refactoring (Example: Clean up poorly written code)
-            - Testing (Example: Write test cases for given functions)
-            - Navigation/Search (Example: Locate where a variable is defined using a code browser)
+        5. **Task Type**: Classify the coding task based on the PRIMARY activity or skill being studied:
+            - Debugging (Example: Identify and fix bugs, error diagnosis, troubleshooting existing code)
+            - Code Comprehension (Example: Read code to understand functionality, trace execution, explain behavior)
+            - Feature Development (Example: Add new functionality, implement new requirements from scratch)
+            - Code Quality (Example: Refactoring, code review, improving maintainability, style fixes)
+            - Testing & Validation (Example: Write tests, verify correctness, quality assurance)
+            - Problem Solving (Example: Algorithmic challenges, data structure implementation, computational thinking)
+            - Tool Usage (Example: IDE navigation, version control, debugging tools, code search)
+            - Collaboration (Example: Code review, pair programming, discussing code with others)
             - Other (specify what type)
+
         """
 
         prompt = ChatPromptTemplate.from_messages([
