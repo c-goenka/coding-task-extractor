@@ -10,7 +10,7 @@ class CSVWriter:
         with open(output_path, 'w', newline='', encoding='utf-8') as csv_file:
             fieldnames = [
                 'paper_id', 'title', 'authors', 'venue', 'year',
-                'isbn', 'url', 'abstract', 'coding_task',
+                'url', 'abstract', 'coding_task',
                 'task_summary', 'participant_skill_level', 'programming_language',
                 'programming_domain', 'programming_sub_domain', 'task_type',
                 'code_size_scope', 'evaluation_metrics', 'tools_environment', 'research_focus'
@@ -27,7 +27,6 @@ class CSVWriter:
                         'authors': paper_metadata.get('authors', ''),
                         'venue': paper_metadata.get('venue', ''),
                         'year': paper_metadata.get('year', ''),
-                        'isbn': paper_metadata.get('isbn', ''),
                         'url': paper_metadata.get('url', ''),
                         'abstract': paper_metadata.get('abstract', ''),
                         'coding_task': coding_tasks[paper_id],
@@ -51,7 +50,7 @@ class CSVWriter:
         with open(output_path, 'w', newline='', encoding='utf-8') as csv_file:
             fieldnames = [
                 'paper_id', 'title', 'authors', 'venue', 'year',
-                'isbn', 'url', 'abstract', 'coding_task'
+                'url', 'abstract', 'coding_task'
             ]
             writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
             writer.writeheader()
@@ -65,7 +64,6 @@ class CSVWriter:
                         'authors': paper_metadata.get('authors', ''),
                         'venue': paper_metadata.get('venue', ''),
                         'year': paper_metadata.get('year', ''),
-                        'isbn': paper_metadata.get('isbn', ''),
                         'url': paper_metadata.get('url', ''),
                         'abstract': paper_metadata.get('abstract', ''),
                         'coding_task': task_description,

@@ -1,3 +1,4 @@
+import json
 import pandas as pd
 import numpy as np
 
@@ -10,12 +11,11 @@ class DataProcessor:
             'Author' : 'authors',
             'Publication Title' : 'venue',
             'Publication Year' : 'year',
-            'ISBN' : 'isbn',
             'Url' : 'url',
             'Abstract Note' : 'abstract',
             'File Attachments' : 'pdf_path'
         }
-        self.selected_columns = ['paper_id', 'title', 'authors', 'venue', 'year', 'isbn', 'url', 'abstract', 'pdf_path']
+        self.selected_columns = ['paper_id', 'title', 'authors', 'venue', 'year', 'url', 'abstract', 'pdf_path']
 
     def process_papers(self, papers_csv_path):
         papers_df = pd.read_csv(papers_csv_path)
