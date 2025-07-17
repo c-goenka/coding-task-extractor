@@ -7,10 +7,15 @@ from pydantic import BaseModel, Field
 
 class TaskCategories(BaseModel):
     task_summary: str = Field(description="task description summary")
-    skill_level: Optional[str] = Field(default=None, description="participant skill level")
+    participant_skill_level: Optional[str] = Field(default=None, description="participant skill level")
     programming_language: Optional[str] = Field(default=None, description='programming language used in user study')
     programming_domain: Optional[str] = Field(default=None, description="programming domain of the coding task")
+    programming_sub_domain: Optional[str] = Field(default=None, description="more specific sub-domain within the programming domain")
     task_type: Optional[str] = Field(default=None, description='type of programming activity in the coding task')
+    code_size_scope: Optional[str] = Field(default=None, description='size or scope of the codebase (small snippet, function, module, full application)')
+    evaluation_metrics: Optional[str] = Field(default=None, description='how task success or performance was measured')
+    tools_environment: Optional[str] = Field(default=None, description='specific tools, IDEs, or development environment used')
+    research_focus: Optional[str] = Field(default=None, description='what specific aspect of coding behavior or performance was being studied')
 
 
 class TaskCategorizer:

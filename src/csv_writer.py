@@ -11,7 +11,7 @@ class CSVWriter:
             fieldnames = [
                 'paper_id', 'title', 'authors', 'venue', 'year',
                 'isbn', 'url', 'abstract', 'coding_task',
-                'task_summary', 'skill_level', 'programming_language',
+                'task_summary', 'participant_skill_level', 'programming_language',
                 'programming_domain', 'task_type'
             ]
             writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
@@ -31,7 +31,7 @@ class CSVWriter:
                         'abstract': paper_metadata.get('abstract', ''),
                         'coding_task': coding_tasks[paper_id],
                         'task_summary' : task_categories['task_summary'],
-                        'skill_level' : task_categories['skill_level'],
+                        'participant_skill_level' : task_categories['participant_skill_level'],
                         'programming_language' : task_categories['programming_language'],
                         'programming_domain' : task_categories['programming_domain'],
                         'task_type' : task_categories['task_type']
