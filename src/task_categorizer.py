@@ -45,7 +45,9 @@ class TaskCategorizer:
             - Software Engineering (debugging, refactoring, testing, code review)
             - Other (specify what field)
 
-        5. **Task Type**: Classify the coding task based on the PRIMARY activity or skill being studied:
+        5. **Programming Sub-Domain**: More specific sub-domain within the programming domain (e.g., "Machine Learning" within Data Science, "React Frontend" within Web Development, "Graph Algorithms" within Algorithmic/Problem Solving)
+
+        6. **Task Type**: Classify the coding task based on the PRIMARY activity or skill being studied:
             - Debugging (Example: Identify and fix bugs, error diagnosis, troubleshooting existing code)
             - Code Comprehension (Example: Read code to understand functionality, trace execution, explain behavior)
             - Feature Development (Example: Add new functionality, implement new requirements from scratch)
@@ -55,6 +57,20 @@ class TaskCategorizer:
             - Tool Usage (Example: IDE navigation, version control, debugging tools, code search)
             - Collaboration (Example: Code review, pair programming, discussing code with others)
             - Other (specify what type)
+
+        7. **Code Size/Scope**: Classify the size or scope of the codebase participants worked with:
+            - Snippet (small code fragments, few lines)
+            - Function (single functions or methods)
+            - Module (single files or classes)
+            - Package/Library (multiple related files)
+            - Full Application (complete software systems)
+            - Other (specify scope)
+
+        8. **Evaluation Metrics**: How was task success or performance measured in the study? (e.g., completion time, accuracy, code quality scores, bug detection rate, user satisfaction)
+
+        9. **Tools/Environment**: Specific tools, IDEs, or development environments used in the study (e.g., VS Code, Eclipse, online coding platforms, specific debugging tools)
+
+        10. **Research Focus**: What specific aspect of coding behavior or performance was being studied? (e.g., code navigation patterns, debugging strategies, collaboration effectiveness, learning outcomes)
 
         """
 
