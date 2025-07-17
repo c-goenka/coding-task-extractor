@@ -94,10 +94,15 @@ class TaskCategorizer:
             task_categories = self.categorize_task(task_description)
             results[paper_id] = {
                 'task_summary' : task_categories.task_summary,
-                'skill_level' : task_categories.skill_level,
+                'participant_skill_level' : task_categories.participant_skill_level,
                 'programming_language' : task_categories.programming_language,
                 'programming_domain' : task_categories.programming_domain,
-                'task_type' : task_categories.task_type
+                'programming_sub_domain' : task_categories.programming_sub_domain,
+                'task_type' : task_categories.task_type,
+                'code_size_scope' : task_categories.code_size_scope,
+                'evaluation_metrics' : task_categories.evaluation_metrics,
+                'tools_environment' : task_categories.tools_environment,
+                'research_focus' : task_categories.research_focus
             }
 
         return results
