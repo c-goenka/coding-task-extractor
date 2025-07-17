@@ -23,7 +23,7 @@ class Embedder:
 
         for split_path in split_texts:
             paper_id = split_path.stem
-            output_path = vector_store_dir / f'{paper_id}/'
+            output_path = vector_store_dir / paper_id
 
             if output_path.exists():
                 continue

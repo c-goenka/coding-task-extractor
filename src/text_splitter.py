@@ -5,8 +5,8 @@ class TextSplitter:
     def __init__(self, config):
         self.config = config
         self.text_splitter = RecursiveCharacterTextSplitter(
-            chunk_size= self.config.CHUNK_SIZE,
-            chunk_overlap= self.config.CHUNK_OVERLAP
+            chunk_size=self.config.CHUNK_SIZE,
+            chunk_overlap=self.config.CHUNK_OVERLAP
         )
 
     def split_text(self, text_path, output_path):

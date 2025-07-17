@@ -6,6 +6,7 @@ class TextSectioner:
         self.config = config
         self.fuzzy_match_scorer = fuzz.partial_ratio
         self.fuzzy_match_pre_processor = utils.default_process
+        self.lowercase_keywords = [kw.lower() for kw in self.config.FILTER_KEYWORDS]
 
     def calculate_keyword_density(self, text):
         if not text or len(text) < 50:  # Skip very short texts
@@ -18,8 +19,8 @@ class TextSectioner:
             return 0.0
 
         keyword_count = 0
-        for keyword in self.config.FILTER_KEYWORDS:
-            keyword_count += text_lower.count(keyword.lower())
+        for keyword in self.lowercase_keywords:
+            keyword_count += text_lower.count(keyword)
 
         return keyword_count / total_words
 
@@ -33,7 +34,7 @@ class TextSectioner:
             scorer=self.fuzzy_match_scorer,
             processor=self.fuzzy_match_pre_processor
         )
-        return score[1] >= self.config.FUZZY_MATCH_THRESHOLD
+        return score and score[1] >= self.config.FUZZY_MATCH_THRESHOLD
 
     def section_paper(self, paper_path, output_path):
         section_dict = {}
@@ -61,12 +62,6 @@ class TextSectioner:
 
         if not section_dict:
             return
-
-        # # For CHI '25 papers
-        # keyword_filter = '|'.join(self.config.FILTER_KEYWORDS)
-        # if "abstract" in section_dict:
-        #     if not section_dict['abstract'].contains(keyword_filter, case=False, na=False):
-        #         return
 
         with open(output_path, 'w', encoding="utf-8") as f:
             json.dump(section_dict, f, indent=4)

@@ -60,7 +60,7 @@ class Config:
     ]
 
     SKIP_SECTIONS = [
-        "introduction", "motivation", "background", "related work", "literature review", "appendix"
+        "introduction", "motivation", "background", "related work", "literature review", "appendix",
         "problem statement", "future work", "references", "acknowledgments", "bibliography"
     ]
 
