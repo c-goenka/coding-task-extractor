@@ -31,32 +31,40 @@ class TaskCategorizer:
 
         1. **Task Summary**: A clear and concise summary of the task description
 
-        2. **Skill Level**: Skill level of the user study participants. Were the participants expert, intermediate, or beginner programmers?
+        2. **Skill Level**: Skill level of the user study participants. Use these criteria:
+            - Expert: Professional developers, graduate students, or those with 3+ years experience
+            - Intermediate: Undergraduate CS students (upper-level), bootcamp graduates, or 1-3 years experience
+            - Beginner: Introductory CS students, new learners, or less than 1 year experience
+            - If unclear or mixed skill levels, respond with "Not specified" or "Mixed"
 
-        3. **Programming Language**: What programming language(s) were used? If not explicitly stated, make an educated guess based on context clues (libraries, frameworks, syntax examples, etc.).
+        3. **Programming Language**: What programming language(s) were used? If not explicitly stated, classify based on:
+            - Code snippets or syntax examples shown
+            - Specific libraries/frameworks mentioned (e.g., React=JavaScript, pandas=Python, SwiftUI=Swift)
+            - Development tools mentioned (e.g., Xcode=Swift, Visual Studio=C#, npm=JavaScript)
+            - If uncertain, indicate confidence level (e.g., "Python (likely based on matplotlib mention)" or "Not specified")
 
-        4. **Programming Domain**: Classify the coding task into one of these domains:
-            - Data Science/Analytics (data analysis, visualization, machine learning, statistics)
-            - Web Development (frontend, backend, full-stack, web APIs)
-            - Algorithmic/Problem Solving (algorithms, data structures, competitive programming)
-            - System Programming (operating systems, networking, low-level programming)
-            - Mobile Development (iOS, Android, cross-platform)
-            - Game Development
-            - Software Engineering (debugging, refactoring, testing, code review)
-            - Other (specify what field)
+        4. **Programming Domain**: Classify the coding task into one of these domains (choose the most prominent one):
+            - Data Science/Analytics: Tasks involving data manipulation, statistical analysis, machine learning, visualization, or scientific computing
+            - Web Development: Tasks focused on web applications, websites, APIs, or web services (frontend, backend, or full-stack)
+            - Algorithmic/Problem Solving: Tasks primarily about implementing algorithms, data structures, or solving computational problems
+            - System Programming: Tasks involving operating systems, networking, embedded systems, or low-level programming
+            - Mobile Development: Tasks specifically for mobile platforms (iOS, Android, cross-platform mobile apps)
+            - Game Development: Tasks involving game engines, game logic, graphics, or interactive entertainment
+            - Software Engineering: Tasks focused on software development processes, code quality, maintenance, or development tooling (NOT domain-specific implementation)
+            - Other: Specify the field if none of the above domains apply
 
         5. **Programming Sub-Domain**: More specific sub-domain within the programming domain (e.g., "Machine Learning" within Data Science, "React Frontend" within Web Development, "Graph Algorithms" within Algorithmic/Problem Solving)
 
-        6. **Task Type**: Classify the coding task based on the PRIMARY activity or skill being studied:
-            - Debugging (Example: Identify and fix bugs, error diagnosis, troubleshooting existing code)
-            - Code Comprehension (Example: Read code to understand functionality, trace execution, explain behavior)
-            - Feature Development (Example: Add new functionality, implement new requirements from scratch)
-            - Code Quality (Example: Refactoring, code review, improving maintainability, style fixes)
-            - Testing & Validation (Example: Write tests, verify correctness, quality assurance)
-            - Problem Solving (Example: Algorithmic challenges, data structure implementation, computational thinking)
-            - Tool Usage (Example: IDE navigation, version control, debugging tools, code search)
-            - Collaboration (Example: Code review, pair programming, discussing code with others)
-            - Other (specify what type)
+        6. **Task Type**: Classify the coding task based on the PRIMARY activity or skill being studied (use this priority order if multiple activities are present):
+            - Debugging: Primary goal is finding and fixing errors, bugs, or issues in existing code
+            - Code Comprehension: Primary goal is understanding, analyzing, or explaining existing code functionality
+            - Feature Development: Primary goal is creating new functionality or code from scratch
+            - Code Quality: Primary goal is improving code structure, readability, or maintainability without changing functionality
+            - Testing & Validation: Primary goal is writing tests, verifying correctness, or quality assurance
+            - Problem Solving: Primary goal is solving algorithmic challenges or computational problems
+            - Tool Usage: Primary goal is using development tools, IDEs, or navigating codebases
+            - Collaboration: Primary goal is working with others on code (pair programming, code review)
+            - Other: Specify the type if none of the above categories apply
 
         7. **Code Size/Scope**: Classify the size or scope of the codebase participants worked with:
             - Snippet (small code fragments, few lines)
@@ -71,6 +79,14 @@ class TaskCategorizer:
         9. **Tools/Environment**: Specific tools, IDEs, or development environments used in the study (e.g., VS Code, Eclipse, online coding platforms, specific debugging tools)
 
         10. **Research Focus**: What specific aspect of coding behavior or performance was being studied? (e.g., code navigation patterns, debugging strategies, collaboration effectiveness, learning outcomes)
+
+        **Edge Case Handling:**
+        - If multiple programming languages are used, list the primary language first, then others (e.g., "Python with JavaScript frontend")
+        - If task spans multiple domains, choose the most prominent one and mention others in context
+        - If participant skill level is unclear, respond with "Not specified" rather than guessing
+        - If task involves multiple activities, classify by the activity that consumed the most time or was the main objective
+        - If evaluation metrics are not mentioned, respond with "Not specified" rather than assuming
+        - If code size/scope is unclear, use context clues like "small script" → Snippet, "application" → Full Application
 
         """
 

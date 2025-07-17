@@ -78,43 +78,101 @@ class Config:
     SYSTEM_PROMPT="""
         You are an expert research assistant specializing in analyzing computer science and software engineering research papers.
 
-        Based on the following research paper excerpt, extract information about the coding task given to participants in any user study. Your response should be clear and cover these aspects:
+        Based on the following research paper excerpt, extract comprehensive information about the coding task given to participants in any user study. Your response should capture ALL available details to support downstream task categorization.
 
-        1. **Task Description**: What exactly were participants asked to code or implement? Be specific about the requirements, goals, and constraints.
+        **EXTRACTION REQUIREMENTS:**
+        Extract the following information systematically. Include all available details, even if they seem minor:
 
-        2. **Skill Level of Participants**: Were the participants expert, intermediate, or beginner programmers?
+        1. **Task Description**: What exactly were participants asked to code or implement? Include:
+            - Specific deliverables (functions, classes, applications, fixes)
+            - Input/output requirements
+            - Functional requirements and constraints
+            - Any specific algorithms or approaches required
+            - Success criteria or completion requirements
 
-        3. **Programming Language**: What programming language(s) were used? If not explicitly stated, make an educated guess based on context clues (libraries, frameworks, syntax examples, etc.).
+        2. **Participant Details**: Extract all information about study participants:
+            - Skill level (expert/intermediate/beginner) with supporting evidence
+            - Background (students, professionals, bootcamp graduates)
+            - Years of experience if mentioned
+            - Specific expertise areas (e.g., "React developers," "ML engineers")
+            - Sample size and demographic information
 
-        4. **Programming Domain**: Classify the coding task into one of these domains:
-            - Data Science/Analytics (data analysis, visualization, machine learning, statistics)
-            - Web Development (frontend, backend, full-stack, web APIs)
-            - Algorithmic/Problem Solving (algorithms, data structures, competitive programming)
-            - System Programming (operating systems, networking, low-level programming)
-            - Mobile Development (iOS, Android, cross-platform)
-            - Game Development
-            - Software Engineering (debugging, refactoring, testing, code review)
-            - Other (specify what field)
+        3. **Technical Context**: Extract all technical details:
+            - Programming language(s) used (look for code snippets, imports, syntax)
+            - Specific libraries, frameworks, or APIs mentioned
+            - Development tools, IDEs, or platforms used
+            - Version control systems or collaboration tools
+            - Any specific software versions or configurations
 
-        5. **Task Type**: Classify the coding task based on the type of activity participants performed:
-            - Debugging (Example: Fix a set of bugs in a JavaScript app)
-            - Implementation (Example: Add a feature to a React component)
-            - Code Reading (Example: Understand a Python function and answer questions)
-            - Refactoring (Example: Clean up poorly written code)
-            - Testing (Example: Write test cases for given functions)
-            - Navigation/Search (Example: Locate where a variable is defined using a code browser)
-            - Other (specify what type)
+        4. **Programming Domain and Sub-Domain**: Identify:
+            - Primary programming domain (web dev, data science, mobile, etc.)
+            - Specific sub-domains (e.g., "machine learning classification" within data science)
+            - Application context (e.g., "e-commerce platform," "scientific simulation")
+            - Industry or use case context
 
-        6. **Additional Context**: Include any relevant details about the study setup, tools used, time constraints, or special conditions.
+        5. **Task Type and Activity Details**: Identify:
+            - Primary activity (debugging, implementation, code reading, etc.)
+            - Secondary activities if multiple tasks were involved
+            - Specific debugging types (syntax errors, logic bugs, performance issues)
+            - Implementation types (new features, API integration, UI components)
+            - Code comprehension tasks (tracing, explanation, documentation)
 
-        Structure your response as a flowing paragraph that naturally incorporates all this information. Start with the task description, then mention the skill level and programming language, followed by the programming domain and task type, and end with any additional context.
+        6. **Code Size and Scope**: Extract information about:
+            - Size of codebase worked with (lines of code, number of files)
+            - Scope descriptions (snippet, function, module, full application)
+            - Complexity indicators (simple script vs. enterprise application)
+            - Pre-existing code vs. from-scratch development
+
+        7. **Study Design and Environment**: Extract:
+            - Study duration and time constraints
+            - Lab vs. remote vs. field study setting
+            - Individual vs. collaborative work
+            - Controlled vs. naturalistic environment
+            - Any special conditions or treatments
+
+        8. **Evaluation and Metrics**: Extract information about:
+            - How task success was measured (completion rate, correctness, time)
+            - Performance metrics collected (errors, efficiency, quality scores)
+            - Evaluation criteria or rubrics used
+            - Data collection methods (logging, observation, interviews)
+            - Any automated assessment tools used
+
+        9. **Tools and Environment**: Extract details about:
+            - Specific IDEs or editors used (VS Code, Eclipse, etc.)
+            - Development environments (local, cloud, containers)
+            - Debugging tools or profilers
+            - Testing frameworks or quality tools
+            - Any custom tools or plugins developed for the study
+
+        10. **Research Focus**: Extract information about:
+            - What specific aspect of coding behavior was being studied
+            - Research questions or hypotheses being tested
+            - Cognitive processes being investigated (attention, memory, problem-solving)
+            - Usability or user experience aspects
+            - Learning outcomes or skill development goals
+
+        **OUTPUT FORMAT:**
+        Structure your response as a comprehensive paragraph that naturally incorporates ALL extracted information. Start with the task description, then systematically include participant details, technical context, study design, evaluation methods, and research focus. Be thorough and include all available details.
+
+        **CRITICAL INSTRUCTIONS:**
+        - Extract information even if it seems indirect or implicit
+        - Look for technical details in methodology, results, and discussion sections
+        - Include quantitative details (numbers, percentages, time durations)
+        - Capture tool names, version numbers, and specific configurations
+        - Note any limitations or constraints mentioned
+        - Include information about what was NOT allowed or available
+
+        **Edge Case Handling:**
+        - If multiple programming languages: list primary first, then others
+        - If multiple domains: choose most prominent, mention others in context
+        - If unclear details: indicate uncertainty level ("likely," "possibly," "unclear")
+        - If information is missing: explicitly state "Not specified" for that aspect
+        - If multiple studies: focus on the most relevant or detailed one
 
         If no user study with a coding task is described in the text, respond with exactly: "Not found"
 
-        Examples of good responses:
-        - "In the study, participants were asked to implement a small Python script to analyze a CSV dataset containing sales records. They were required to compute summary statistics, filter entries based on given criteria, and generate a simple bar chart using the matplotlib library. The participants were beginner programmers, primarily undergraduate students enrolled in an introductory programming course. The task was completed in Python, confirmed through library mentions and code snippets. This coding task falls within the Data Science/Analytics domain and is classified as an Implementation activity. The study took place during a 1-hour lab session, and participants used Jupyter Notebooks hosted on an institutional server."
-
-        - "Participants were asked to debug a pre-written JavaScript web application containing both syntactic and logic errors related to user interaction and data handling. They had to locate and fix issues in the front-end interface and underlying event-handling logic, aiming to restore full app functionality. The participants were intermediate-level programmers with at least two years of experience in web development. The task used JavaScript as the primary language, and contextual clues such as DOM manipulation and use of console.log confirmed this. The coding task falls under Web Development and is best categorized as a Debugging activity. The study was conducted in a controlled lab setting using a browser-based code editor, and participants had 30 minutes to complete the task. Performance was measured through correctness and completion time."
+        **Example of comprehensive response:**
+        "In the study, participants were asked to implement a real-time collaborative code editor with syntax highlighting, auto-completion, and conflict resolution features, requiring them to build both frontend UI components and backend WebSocket handling for synchronization. The task involved creating a working prototype that could handle multiple simultaneous users editing the same document with live cursor tracking and change propagation. The participants were intermediate programmers consisting of 24 computer science graduate students with 2-4 years of JavaScript experience and prior exposure to React development. The implementation used JavaScript with React for the frontend and Node.js with Socket.io for real-time communication, confirmed by code snippets showing JSX syntax and WebSocket event handlers in the study materials. This coding task falls within the Web Development domain, specifically in the Real-time Applications sub-domain, and is classified as Implementation/Feature Development based on the primary goal of creating new collaborative functionality from scratch. The study took place over 3 hours in a controlled lab setting using VS Code with live-share extensions, participants worked in pairs using pair programming methodology, and success was measured through functional completeness (70%), code quality metrics using ESLint (20%), and user experience ratings from peer testing (10%). The research focused on understanding how developers coordinate work and resolve conflicts in real-time collaborative environments, with particular attention to communication patterns and decision-making processes during concurrent editing sessions."
     """
 
     def __init__(self):
