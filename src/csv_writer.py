@@ -12,7 +12,8 @@ class CSVWriter:
                 'paper_id', 'title', 'authors', 'venue', 'year',
                 'isbn', 'url', 'abstract', 'coding_task',
                 'task_summary', 'participant_skill_level', 'programming_language',
-                'programming_domain', 'task_type'
+                'programming_domain', 'programming_sub_domain', 'task_type',
+                'code_size_scope', 'evaluation_metrics', 'tools_environment', 'research_focus'
             ]
             writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
             writer.writeheader()
@@ -34,7 +35,12 @@ class CSVWriter:
                         'participant_skill_level' : task_categories['participant_skill_level'],
                         'programming_language' : task_categories['programming_language'],
                         'programming_domain' : task_categories['programming_domain'],
-                        'task_type' : task_categories['task_type']
+                        'programming_sub_domain' : task_categories['programming_sub_domain'],
+                        'task_type' : task_categories['task_type'],
+                        'code_size_scope' : task_categories['code_size_scope'],
+                        'evaluation_metrics' : task_categories['evaluation_metrics'],
+                        'tools_environment' : task_categories['tools_environment'],
+                        'research_focus' : task_categories['research_focus']
                     })
 
         print(f"Results saved to: {output_path}")
