@@ -30,10 +30,26 @@ class RAGExtractor:
             allow_dangerous_deserialization=True
         )
 
-        relevant_docs = vector_store.similarity_search(
-            "coding or programming task performed by participants in user study or evaluation",
-            k=4
-        )
+        queries = [
+            "participants task implementation coding programming development",
+            "user study methodology procedure experiment task assignment",
+            "participants asked implement develop write code program",
+            "evaluation task programming activity coding exercise"
+        ]
+
+        all_docs = []
+        for query in queries:
+            docs = vector_store.similarity_search(query, k=2)
+            all_docs.extend(docs)
+
+        seen_content = set()
+        relevant_docs = []
+        for doc in all_docs:
+            if doc.page_content not in seen_content:
+                seen_content.add(doc.page_content)
+                relevant_docs.append(doc)
+
+        relevant_docs = relevant_docs[:6]
 
         context = "\n\n".join([doc.page_content for doc in relevant_docs])
         return context
