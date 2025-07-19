@@ -1,3 +1,4 @@
+import pandas as pd
 from config import Config
 from src.data_processor import DataProcessor
 from src.pdf_parser import PDFParser
@@ -50,6 +51,9 @@ class CodingTaskExtractor:
 
         print("Saving intermediate results to CSV...")
         self.csv_writer.write_results_to_csv_intermediate(papers_dict, coding_tasks)
+
+        # df = pd.read_csv('./data/results/results_chi_25_intermediate.csv')
+        # coding_tasks = df.set_index('paper_id')['coding_task'].to_dict()
 
         print("Categorizing tasks...")
         results = self.task_categorizer.categorize_all_tasks(coding_tasks)
