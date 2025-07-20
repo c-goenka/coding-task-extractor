@@ -9,8 +9,11 @@ class Embedder:
         self.embedding_model = OpenAIEmbeddings(model=self.config.EMBEDDING_MODEL)
 
     def embed_split(self, split_path, output_path):
-        with open(split_path, 'r') as f:
+        with open(split_path, 'r', encoding='utf-8') as f:
             splits = json.load(f)
+
+        if not splits:
+            return
 
         docs = [Document(page_content=split['content'], metadata=split['metadata']) for split in splits]
         vector_store = FAISS.from_documents(docs, self.embedding_model)
