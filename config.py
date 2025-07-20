@@ -169,21 +169,10 @@ class Config:
         - Note file extensions, import statements, syntax examples
         - Include negative information ("no debugging tools provided")
         - Capture uncertainty markers ("likely", "possibly", "appeared to")
-        - Extract domain-specific jargon and terminology
         - Include participant quotes about their experience or background
 
         **OUTPUT FORMAT:**
         Provide a comprehensive, fact-dense paragraph containing ALL extracted information. Start with task details, then systematically include all participant information, technical specifics, environmental details, and research context. Use exact quotes where available and include all technical indicators found.
-
-        **TECHNICAL INDICATOR FOCUS:**
-        Pay special attention to:
-        - Library/framework names (pandas, React, Spring, Unity, etc.)
-        - File extensions (.py, .js, .java, .html, .css, etc.)
-        - Tool names (VS Code, Eclipse, Xcode, Git, Docker, etc.)
-        - Code syntax or language-specific terms
-        - Platform names (GitHub, AWS, Android Studio, etc.)
-        - Version control indicators
-        - Build system mentions (npm, gradle, make, etc.)
 
         If no user study with a coding task is described in the text, respond with exactly: "Not found"
     """

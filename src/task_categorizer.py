@@ -41,16 +41,12 @@ class TaskCategorizer:
             **Important**: If participants have varying skill levels, list them separated by commas (e.g., "Beginner, Intermediate" or "Intermediate, Expert") rather than using "Mixed"
 
             **Inference guidelines:**
-            - If participants are "recruited from universities" or "CS students" → likely Intermediate
-            - If "professional developers", "industry professionals", "full-time developers" → Expert
-            - If "novices", "no experience", "introductory", "new learners" mentioned → Beginner
-            - If mix of professionals and students → "Intermediate, Expert"
-            - If PhD students, researchers, or "graduate students" → Expert
-            - If undergraduates without CS background → Beginner
-            - If "experienced users", "skilled practitioners", "3+ years" → Expert
-            - If "bootcamp graduates", "hobbyists", "some experience" → Intermediate
-            - If "specific experience in domain" mentioned → likely Intermediate to Expert
-            - If participants have "varying skill levels" or "mixed backgrounds" → list the levels present (e.g., "Beginner, Intermediate, Expert")
+            - "CS students", "recruited from universities" → Intermediate
+            - "professional developers", "industry professionals" → Expert  
+            - "novices", "no experience", "introductory" → Beginner
+            - "graduate students", "PhD students", "researchers" → Expert
+            - "bootcamp graduates", "hobbyists", "some experience" → Intermediate
+            - Mix of backgrounds → list levels present (e.g., "Beginner, Intermediate, Expert")
             - Default to "Intermediate" if ambiguous but educational context present
 
         3. **Programming Language**: What programming language(s) were used? Analyze the extracted context for these indicators:
@@ -89,16 +85,15 @@ class TaskCategorizer:
             - Research Tools: Academic research software, data collection tools, analysis platforms
 
             **Domain inference guidelines:**
-            - If mentions "user interface", "interaction", "usability", "AR", "VR", "augmented reality" → Human-Computer Interaction
-            - If mentions "AI", "machine learning", "neural networks", "LLM", "GPT", "ChatGPT" → Artificial Intelligence/ML
-            - If mentions "animation", "video", "graphics", "creative", "generative art" → Creative/Media
-            - If mentions "students", "learning", "educational", "tutoring" → Education/Learning
-            - If mentions "research", "academic", "study platform", "data collection" → Research Tools
-            - If mentions "web", "website", "React", "Angular", "Vue", "frontend", "backend" → Web Development
-            - If mentions "mobile", "iOS", "Android", "Swift", "Kotlin" specifically → Mobile Development
-            - If mentions "game", "Unity", "Unreal", "gaming" → Game Development
-            - If mentions "data science", "pandas", "numpy", "matplotlib", "statistical" → Data Science/Analytics
-            - Default to most contextually appropriate domain, avoid "Other"
+            - "UI", "interaction", "usability", "AR", "VR" → Human-Computer Interaction
+            - "AI", "machine learning", "LLM", "GPT" → Artificial Intelligence/ML
+            - "animation", "video", "graphics", "creative" → Creative/Media
+            - "learning", "educational", "tutoring" → Education/Learning
+            - "research", "academic", "data collection" → Research Tools
+            - "web", "React", "Angular", "frontend", "backend" → Web Development
+            - "mobile", "iOS", "Android", "Swift", "Kotlin" → Mobile Development
+            - "game", "Unity", "gaming" → Game Development
+            - "data science", "pandas", "statistical" → Data Science/Analytics
 
         5. **Programming Sub-Domain**: More specific sub-domain within the programming domain (e.g., "Machine Learning" within AI, "React Frontend" within Web Development, "iOS Development" within Mobile Development)
 
@@ -155,16 +150,12 @@ class TaskCategorizer:
 
         **General Guidelines:**
         - Always make educated guesses based on contextual clues rather than using "Not specified"
-        - Carefully analyze all technical indicators provided in the raw extracted context
-        - Look for exact technical terms, file extensions, library names, and tool mentions in the context
-        - For skill levels: Use comma-separated values (e.g., "Beginner, Intermediate") when participants have varying skill levels instead of "Mixed"
-        - Use "Other" only when the task genuinely doesn't fit existing categories AND specify what it is
-        - Consider the broader context of the study, participant backgrounds, and research goals
-        - If multiple programming languages are used, list the primary language first, then others
-        - If task spans multiple domains, choose the most prominent one and mention others in context
-        - If task involves multiple activities, classify by the activity that consumed the most time or was the main objective
-        - Pay special attention to quantitative details (numbers, percentages, time durations) for scope classification
-        - Use quoted technical terms and exact tool names from the context when making classifications
+        - Analyze technical indicators: file extensions, library names, tool mentions
+        - Use comma-separated skill levels for mixed groups (e.g., "Beginner, Intermediate")
+        - If multiple languages: list primary first, then others
+        - If multiple domains: choose most prominent
+        - If multiple activities: classify by primary/time-consuming activity
+        - Use quantitative details for scope classification
 
         """
 
