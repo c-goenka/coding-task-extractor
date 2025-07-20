@@ -9,36 +9,42 @@ class TextSplitter:
             chunk_overlap=self.config.CHUNK_OVERLAP
         )
 
-    def split_text(self, text_path, output_path):
+    def split_text(self, paper_path, output_path):
         splits = []
 
-        with open(text_path, 'r') as f:
-            relevant_sections = json.load(f)
+        with open(paper_path, 'r', encoding="utf-8") as f:
+            paper_text = f.read()
 
-        for section_name, section_text in relevant_sections.items():
-            section_splits = self.text_splitter.split_text(section_text)
+        # Skip empty files
+        if not paper_text.strip():
+            return
 
-            for split_index, split_text in enumerate(section_splits):
-                splits.append({
-                    'content' : split_text,
-                    'metadata' : {
-                        'section' : section_name,
-                        'split_index' : split_index
-                    }
-                })
+        paper_splits = self.text_splitter.split_text(paper_text)
 
-        with open(output_path, 'w') as f:
+        for split_index, split_text in enumerate(paper_splits):
+            splits.append({
+                'content': split_text,
+                'metadata': {
+                    'split_index': split_index,
+                    'source_file': paper_path.name,
+                    'chunk_size': len(split_text),
+                    'total_chunks': len(paper_splits)
+                }
+            })
+            
+        with open(output_path, 'w', encoding="utf-8") as f:
             json.dump(splits, f, indent=4)
 
     def split_all_texts(self):
-        sectioned_dir = self.config.SECTIONED_PAPER_DIR
+        parsed_dir = self.config.PARSED_PAPER_DIR
         split_dir = self.config.SPLIT_TEXT_DIR
-        sectioned_texts = sectioned_dir.iterdir()
 
-        for text_path in sectioned_texts:
-            paper_id = text_path.stem
+        parsed_papers = parsed_dir.iterdir()
+
+        for paper_path in parsed_papers:
+            paper_id = paper_path.stem
             output_path = split_dir / f'{paper_id}.json'
 
             if output_path.exists():
                 continue
-            self.split_text(text_path, output_path)
+            self.split_text(paper_path, output_path)

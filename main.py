@@ -30,8 +30,8 @@ class CodingTaskExtractor:
         print("Parsing PDFs...")
         self.pdf_parser.parse_all_pdfs(papers_dict)
 
-        print("Sectioning papers...")
-        self.text_sectioner.section_all_papers()
+        # print("Sectioning papers...")
+        # self.text_sectioner.section_all_papers()
 
         print("Splitting text...")
         self.text_splitter.split_all_texts()
