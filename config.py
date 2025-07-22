@@ -1,81 +1,35 @@
 from pathlib import Path
 
 class Config:
-    DATA_DIR = Path('data')
-    PARSED_PAPER_DIR = DATA_DIR / 'parsed'
-    SECTIONED_PAPER_DIR = DATA_DIR / 'sectioned'
-    SPLIT_TEXT_DIR = DATA_DIR / 'split'
-    VECTOR_STORE_DIR = DATA_DIR / 'vector_stores'
-    RESULT_DIR = DATA_DIR / 'results'
+    def __init__(self, conference_name=None):
+        self.conference_name = conference_name or 'untitled'
+        self.DATA_DIR = Path('data') / self.conference_name
 
-    FILTER_KEYWORDS = [
-        # Core study terms
-        'user', 'study', 'participant', 'subject', 'volunteer',
-        'experiment', 'trial', 'test', 'eval', 'evaluation', 'assess',
+        self.PARSED_PAPER_DIR = self.DATA_DIR / 'parsed'
+        self.SPLIT_TEXT_DIR = self.DATA_DIR / 'split'
+        self.VECTOR_STORE_DIR = self.DATA_DIR / 'vector_stores'
+        self.RESULT_DIR = self.DATA_DIR / 'results'
 
-        # Human subjects and participants
-        'human', 'people', 'person', 'individual', 'recruit', 'recruited',
-        'developer', 'programmer', 'coder', 'student', 'professional',
+        self._create_directories()
+        self._setup_configuration()
 
-        # Study types and methodologies
-        'empirical', 'qualitative', 'quantitative', 'survey', 'interview',
-        'observation', 'case study', 'field study', 'lab study',
-        'controlled study', 'randomized', 'within-subject', 'between-subject',
+    def _create_directories(self):
+        dir_list = [
+            self.DATA_DIR, self.PARSED_PAPER_DIR, self.SPLIT_TEXT_DIR,
+            self.VECTOR_STORE_DIR, self.RESULT_DIR
+        ]
+        for dir_path in dir_list:
+            dir_path.mkdir(parents=True, exist_ok=True)
 
-        # Task-related terms
-        'task', 'assignment', 'exercise', 'problem', 'challenge',
-        'implementation', 'coding', 'programming', 'development',
-        'debug', 'refactor', 'review', 'write code', 'software',
+    def _setup_configuration(self):
+        self.CHUNK_SIZE = 1000
+        self.CHUNK_OVERLAP = 200
 
-        # Research methods
-        'methodology', 'protocol', 'procedure', 'design', 'analysis',
-        'data collection', 'measurement', 'metric', 'performance',
-        'usability', 'user experience', 'effectiveness', 'efficiency',
+        self.EMBEDDING_MODEL = 'text-embedding-3-small'
 
-        # Study conditions and comparisons
-        'condition', 'treatment', 'control', 'baseline', 'comparison',
-        'group', 'cohort', 'sample', 'population',
-
-        # Common study verbs
-        'conducted', 'performed', 'administered', 'collected', 'measured',
-        'observed', 'recorded', 'analyzed', 'compared', 'investigated',
-
-        # Tools and environments
-        'IDE', 'editor', 'environment', 'tool', 'platform', 'system',
-        'interface', 'workspace',
-
-        # Results and findings
-        'result', 'finding', 'outcome', 'effect', 'impact', 'influence',
-        'correlation', 'significant', 'evidence'
-    ]
-
-    SECTION_NAMES = [
-        "abstract", "introduction", "intro", "motivation", "background", "problem statement",
-        "related work", "literature review", "method", "methodology", "study", "user study",
-        "study design", "experimental setup", "participants", "procedure", "tasks", "task design",
-        "materials", "apparatus", "implementation", "system", "system design", "system overview",
-        "design goals", "evaluation", "user testing", "results", "findings", "analysis",
-        "discussion", "limitations", "future work", "conclusion", "summary", "references",
-        "acknowledgments", "bibliography", "appendix"
-    ]
-
-    SKIP_SECTIONS = [
-        "introduction", "motivation", "background", "related work", "literature review", "appendix",
-        "problem statement", "future work", "references", "acknowledgments", "bibliography"
-    ]
-
-    FUZZY_MATCH_THRESHOLD = 50
-    LARGE_SECTION_THRESHOLD = 2000  # Keep sections larger than this even if in skip list
-    KEYWORD_DENSITY_THRESHOLD = 0.02  # Keep sections with >2% keyword density
-
-    CHUNK_SIZE = 1000
-    CHUNK_OVERLAP = 200
-
-    EMBEDDING_MODEL = 'text-embedding-3-small'
-
-    LLM_MODEL = 'gpt-4o-mini'
-    LLM_TEMPERATURE = 0.2
-    SYSTEM_PROMPT="""
+        self.LLM_MODEL = 'gpt-4o-mini'
+        self.LLM_TEMPERATURE = 0.2
+        self.SYSTEM_PROMPT = """
         You are an expert research assistant specializing in extracting raw factual information from computer science and software engineering research papers.
 
         Based on the following research paper excerpt, extract comprehensive RAW INFORMATION about coding tasks given to participants. Focus on factual extraction without interpretation - provide all technical details exactly as mentioned.
@@ -175,13 +129,4 @@ class Config:
         Provide a comprehensive, fact-dense paragraph containing ALL extracted information. Start with task details, then systematically include all participant information, technical specifics, environmental details, and research context. Use exact quotes where available and include all technical indicators found.
 
         If no user study with a coding task is described in the text, respond with exactly: "Not found"
-    """
-
-    def __init__(self):
-        dir_list = [
-            self.DATA_DIR, self.PARSED_PAPER_DIR, self.SECTIONED_PAPER_DIR,
-            self.SPLIT_TEXT_DIR, self.VECTOR_STORE_DIR, self.RESULT_DIR
-        ]
-
-        for dir_path in dir_list:
-            dir_path.mkdir(parents=True, exist_ok=True)
+        """
