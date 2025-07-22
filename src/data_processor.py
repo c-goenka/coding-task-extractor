@@ -21,17 +21,6 @@ class DataProcessor:
         papers_df = pd.read_csv(papers_csv_path)
         papers_df = papers_df.rename(columns=self.column_rename_mapping)
 
-        keyword_filter = '|'.join(self.config.FILTER_KEYWORDS)
-        original_length = len(papers_df)
-
-        papers_df['abstract'] = papers_df['abstract'].replace('', np.nan)
-
-        print("Number of papers with no abstract:", papers_df['abstract'].isna().sum())
-
-        papers_df = papers_df[papers_df['abstract'].str.contains(keyword_filter, case=False, na=True)]
-
-        print(f'Selected {len(papers_df)} papers out of {original_length} in CHI 24 papers')
-
         papers_dict = papers_df[self.selected_columns].set_index('paper_id').to_dict(orient='index')
 
         output_path = self.config.DATA_DIR / "papers_dict.json"
