@@ -59,9 +59,6 @@ class CodingTaskExtractor:
         self.csv_writer = CSVWriter(self.config)
 
     def run_pipeline(self, csv_file_path, steps=None, force=False):
-        """Run the complete pipeline with optional step selection"""
-
-        # Default to all steps if none specified
         if steps is None:
             steps = ['parse', 'split', 'embed', 'extract', 'categorize']
 
@@ -72,6 +69,7 @@ class CodingTaskExtractor:
         # Step 1: Process papers metadata (always required)
         print("Processing papers metadata...")
         papers_dict = self.data_processor.process_papers(csv_file_path)
+        print(f"Found {len(papers_dict)} papers to process")
 
         # Step 2: Parse PDFs
         if 'parse' in steps:

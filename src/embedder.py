@@ -1,4 +1,5 @@
 import json
+import time
 from langchain_openai import OpenAIEmbeddings
 from langchain_community.vectorstores import FAISS
 from langchain_core.documents import Document
@@ -9,15 +10,21 @@ class Embedder:
         self.embedding_model = OpenAIEmbeddings(model=self.config.EMBEDDING_MODEL)
 
     def embed_split(self, split_path, output_path):
-        with open(split_path, 'r', encoding='utf-8') as f:
-            splits = json.load(f)
+        try:
+            time.sleep(0.5)
 
-        if not splits:
-            return
+            with open(split_path, 'r', encoding='utf-8') as f:
+                splits = json.load(f)
 
-        docs = [Document(page_content=split['content'], metadata=split['metadata']) for split in splits]
-        vector_store = FAISS.from_documents(docs, self.embedding_model)
-        vector_store.save_local(output_path)
+            if not splits:
+                return
+
+            docs = [Document(page_content=split['content'], metadata=split['metadata']) for split in splits]
+            vector_store = FAISS.from_documents(docs, self.embedding_model)
+            vector_store.save_local(output_path)
+
+        except Exception as e:
+            print(f"Error embedding {split_path.name}: {e}")
 
     def embed_all_splits(self):
         split_dir = self.config.SPLIT_TEXT_DIR

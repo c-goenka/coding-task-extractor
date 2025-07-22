@@ -1,3 +1,4 @@
+import time
 from langchain_community.vectorstores import FAISS
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 from langchain_core.prompts import ChatPromptTemplate
@@ -22,42 +23,54 @@ class RAGExtractor:
         self.chain: Runnable = prompt | self.llm | StrOutputParser()
 
     def get_context(self, paper_id):
-        vs_path = self.config.VECTOR_STORE_DIR / paper_id
+        try:
+            vs_path = self.config.VECTOR_STORE_DIR / paper_id
 
-        vector_store = FAISS.load_local(
-            vs_path,
-            self.embedding_model,
-            allow_dangerous_deserialization=True
-        )
+            vector_store = FAISS.load_local(
+                vs_path,
+                self.embedding_model,
+                allow_dangerous_deserialization=True
+            )
 
-        queries = [
-            "participants task implementation coding programming development",
-            "user study methodology procedure experiment task assignment",
-            "participants asked implement develop write code program",
-            "evaluation task programming activity coding exercise"
-        ]
+            queries = [
+                "participants task implementation coding programming development",
+                "user study methodology procedure experiment task assignment",
+                "participants asked implement develop write code program",
+                "evaluation task programming activity coding exercise"
+            ]
 
-        all_docs = []
-        for query in queries:
-            docs = vector_store.similarity_search(query, k=2)
-            all_docs.extend(docs)
+            all_docs = []
+            for query in queries:
+                docs = vector_store.similarity_search(query, k=2)
+                all_docs.extend(docs)
 
-        seen_content = set()
-        relevant_docs = []
-        for doc in all_docs:
-            if doc.page_content not in seen_content:
-                seen_content.add(doc.page_content)
-                relevant_docs.append(doc)
+            seen_content = set()
+            relevant_docs = []
+            for doc in all_docs:
+                if doc.page_content not in seen_content:
+                    seen_content.add(doc.page_content)
+                    relevant_docs.append(doc)
 
-        relevant_docs = relevant_docs[:6]
+            relevant_docs = relevant_docs[:6]
 
-        context = "\n\n".join([doc.page_content for doc in relevant_docs])
-        return context
+            context = "\n\n".join([doc.page_content for doc in relevant_docs])
+            return context
+            
+        except Exception as e:
+            print(f"Error loading vector store for {paper_id}: {e}")
+            return ""
 
     def extract_task(self, paper_id):
-        context = self.get_context(paper_id)
-        response = self.chain.invoke({"context": context})
-        return response
+        try:
+            time.sleep(0.5)
+
+            context = self.get_context(paper_id)
+            response = self.chain.invoke({"context": context})
+            return response
+
+        except Exception as e:
+            print(f"Error extracting task for {paper_id}: {e}")
+            return "Not found"
 
     def extract_all_tasks(self):
         vector_store_dir = self.config.VECTOR_STORE_DIR

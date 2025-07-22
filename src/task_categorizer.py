@@ -1,3 +1,4 @@
+import time
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import Runnable
@@ -6,7 +7,7 @@ from typing import Optional
 from pydantic import BaseModel, Field
 
 class TaskCategories(BaseModel):
-    task_summary: str = Field(description="task description summary")
+    task_summary: str = Field(default='Task not found', description="task description summary")
     participant_skill_level: Optional[str] = Field(default=None, description="participant skill level")
     programming_language: Optional[str] = Field(default=None, description='programming language used in user study')
     programming_domain: Optional[str] = Field(default=None, description="programming domain of the coding task")
@@ -42,7 +43,7 @@ class TaskCategorizer:
 
             **Inference guidelines:**
             - "CS students", "recruited from universities" → Intermediate
-            - "professional developers", "industry professionals" → Expert  
+            - "professional developers", "industry professionals" → Expert
             - "novices", "no experience", "introductory" → Beginner
             - "graduate students", "PhD students", "researchers" → Expert
             - "bootcamp graduates", "hobbyists", "some experience" → Intermediate
@@ -50,18 +51,18 @@ class TaskCategorizer:
             - Default to "Intermediate" if ambiguous but educational context present
 
         3. **Programming Language**: What programming language(s) were used? Analyze the extracted context for these indicators:
-            
+
             **Primary Indicators (look for these first):**
             - File extensions: .py=Python, .js/.jsx/.ts/.tsx=JavaScript/TypeScript, .java=Java, .cpp/.c/.h=C/C++, .cs=C#, .swift=Swift, .kt=Kotlin, .rb=Ruby, .php=PHP, .go=Go, .rs=Rust, .html/.css=Web technologies
             - Library/framework names: pandas/numpy/matplotlib/scikit-learn/tensorflow=Python, React/Angular/Vue/Node.js/Express=JavaScript, Spring/Hibernate=Java, .NET/Entity Framework=C#, SwiftUI/UIKit=Swift, Flutter=Dart, Rails=Ruby
             - Code syntax clues: import/from statements=Python, require/import=JavaScript, import/package=Java, using=C#, #include=C/C++
             - Tool indicators: pip/conda=Python, npm/yarn/webpack=JavaScript, gradle/maven=Java, NuGet=C#, CocoaPods/Swift Package Manager=Swift, Cargo=Rust
-            
+
             **Secondary Indicators:**
             - Platform/IDE mentions: Xcode=Swift, Android Studio=Java/Kotlin, Visual Studio=C#/.NET, PyCharm=Python, WebStorm=JavaScript
             - Domain patterns: Data science/ML=likely Python, Web development=likely JavaScript, iOS=Swift, Android=Java/Kotlin, Game development=C# (Unity) or C++, System programming=C/C++/Rust
             - Build systems: npm=JavaScript, pip=Python, gradle=Java, make=C/C++, cargo=Rust
-            
+
             **Inference Priority:**
             1. If multiple indicators point to same language → Use that language with confidence
             2. If mixed indicators → List primary language first, then mention others
@@ -167,8 +168,15 @@ class TaskCategorizer:
         self.chain: Runnable = prompt | self.llm
 
     def categorize_task(self, task_description):
-        response = self.chain.invoke({'context' : task_description})
-        return response
+        try:
+            time.sleep(0.5)
+
+            response = self.chain.invoke({'context' : task_description})
+            return response
+
+        except Exception as e:
+            print(f"Error categorizing task: {e}")
+            return TaskCategories(task_summary='Error processing task')
 
     def categorize_all_tasks(self, coding_tasks):
         results = {}
