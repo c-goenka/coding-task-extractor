@@ -23,7 +23,7 @@ class DataProcessor:
 
         papers_dict = papers_df[self.selected_columns].set_index('paper_id').to_dict(orient='index')
 
-        output_path = self.config.DATA_DIR / f"{self.config.conference_name}papers_dict.json"
+        output_path = self.config.DATA_DIR / f"{self.config.conference_name}_papers_dict.json"
         with open(output_path, 'w') as f:
             json.dump(papers_dict, f, indent=4)
 

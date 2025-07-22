@@ -1,3 +1,4 @@
+import shutil
 from pathlib import Path
 
 class Config:
@@ -130,3 +131,25 @@ class Config:
 
         If no user study with a coding task is described in the text, respond with exactly: "Not found"
         """
+
+    def force_cleanup(self, steps):
+        cleanup_map = {
+            'process': self.DATA_DIR / f"{self.conference_name}_papers_dict.json",
+            'parse': self.PARSED_PAPER_DIR,
+            'split': self.SPLIT_TEXT_DIR,
+            'embed': self.VECTOR_STORE_DIR,
+            'extract': self.RESULT_DIR / f"results_{self.conference_name}_intermediate.csv",
+            'categorize': self.RESULT_DIR / f"results_{self.conference_name}.csv"
+        }
+
+        for step in steps:
+            if step in cleanup_map:
+                target = cleanup_map[step]
+                if target.exists():
+                    if target.is_dir():
+                        shutil.rmtree(target)
+                        target.mkdir(parents=True)
+                    else:
+                        target.unlink()
+
+        print(f"Cleaned up intermediate files for steps: {', '.join(steps)}")

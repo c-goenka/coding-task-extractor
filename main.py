@@ -114,15 +114,15 @@ class CodingTaskExtractor:
             print("Saving categorized results...")
             self.csv_writer.write_results_to_csv(papers_dict, coding_tasks, results)
 
-            return results
+            return
 
         print("Pipeline completed.")
-        return {}
+        return
 
 def main():
     args = parse_arguments()
 
-    # wildcare file names
+    # wildcard file names
     input_files = []
     for pattern in args.input_files:
         expanded = glob.glob(pattern)
@@ -138,7 +138,6 @@ def main():
         steps = [step.strip() for step in step_input]
 
     # process each conference
-    total_tasks = 0
     for csv_file in input_files:
         print(f"Processing {csv_file}")
 
@@ -148,7 +147,12 @@ def main():
             conference_name=conference_name,
         )
 
-        results = extractor.run_pipeline(
+        # Clean up intermediate files if force is requested
+        if args.force:
+            cleanup_steps = steps or ['process', 'parse', 'split', 'embed', 'extract', 'categorize']
+            extractor.config.force_cleanup(cleanup_steps)
+
+        extractor.run_pipeline(
             csv_file_path=csv_file,
             steps=steps,
             force=args.force
