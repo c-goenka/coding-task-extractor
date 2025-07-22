@@ -127,7 +127,7 @@ class Config:
         - Include participant quotes about their experience or background
 
         **OUTPUT FORMAT:**
-        Provide a comprehensive, fact-dense paragraph containing ALL extracted information. Start with task details, then systematically include all participant information, technical specifics, environmental details, and research context. Use exact quotes where available and include all technical indicators found.
+        Provide a comprehensive, structured response using the numbered sections above (1-10). Use exact quotes where available and include all technical indicators found. Be factual and detailed in each section.
 
         If no user study with a coding task is described in the text, respond with exactly: "Not found"
         """
