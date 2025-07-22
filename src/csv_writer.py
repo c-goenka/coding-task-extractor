@@ -5,7 +5,7 @@ class CSVWriter:
         self.config = config
 
     def write_results_to_csv(self, papers_dict, coding_tasks, categorized_results):
-        output_path = self.config.RESULT_DIR / f"results_chi_25.csv"
+        output_path = self.config.RESULT_DIR / f"results_{self.config.conference_name}.csv"
 
         with open(output_path, 'w', newline='', encoding='utf-8') as csv_file:
             fieldnames = [
@@ -48,7 +48,7 @@ class CSVWriter:
         print(f"Results saved to: {output_path}")
 
     def write_results_to_csv_intermediate(self, papers_dict, coding_tasks):
-        output_path = self.config.RESULT_DIR / f"results_chi_25_intermediate.csv"
+        output_path = self.config.RESULT_DIR / f"results_{self.config.conference_name}_intermediate.csv"
 
         with open(output_path, 'w', newline='', encoding='utf-8') as csv_file:
             fieldnames = [
