@@ -63,6 +63,13 @@ class TaskCategorizer:
             - Domain patterns: Data science/ML=likely Python, Web development=likely JavaScript, iOS=Swift, Android=Java/Kotlin, Game development=C# (Unity) or C++, System programming=C/C++/Rust
             - Build systems: npm=JavaScript, pip=Python, gradle=Java, make=C/C++, cargo=Rust
 
+            **CRITICAL - "Not Specified" Language Rule:**
+            If you cannot find ANY programming language indicators (file extensions, libraries, frameworks, tools, syntax, or development context), this is a STRONG signal that the study may not be about programming tools. Re-examine the task for non-programming activities like:
+            - Physical interactions (typing tests, haptic feedback)
+            - Sensory studies (sound, smell, vibration rating)
+            - General UI evaluation (comfort rating, usability testing)
+            - Creative tasks (content creation, design)
+
             **Inference Priority:**
             1. If multiple indicators point to same language → Use that language with confidence
             2. If mixed indicators → List primary language first, then mention others
@@ -70,7 +77,7 @@ class TaskCategorizer:
             4. If web-related without specifics → "JavaScript (web development context)"
             5. If data science/ML context → "Python (data science context)"
             6. If mobile development → "Swift (iOS) or Java/Kotlin (Android)"
-            7. Only use "Not specified" if absolutely no technical indicators exist
+            7. Only use "Not specified" if absolutely no technical indicators exist AND you suspect it may not be programming-related
 
         4. **Programming Domain**: Classify the coding task into one of these domains. Make educated guesses based on context:
             - Data Science/Analytics: Data manipulation, statistical analysis, machine learning, visualization, scientific computing
@@ -145,18 +152,32 @@ class TaskCategorizer:
 
         10. **Research Focus**: What specific aspect of coding behavior or performance was being studied? (e.g., code navigation patterns, debugging strategies, collaboration effectiveness, learning outcomes)
 
-        11. **Programming Tools Related**: Is this research paper and user study task related to programming tools, development tools, or programming tool development? This includes:
-            - Development environments (IDEs, editors, debuggers)
-            - Programming assistants (AI coding tools, code completion, code generation)
-            - Code analysis tools (linters, formatters, static analyzers)
-            - Development workflows and processes
-            - Programming education tools
-            - Code collaboration and version control tools
-            - Build systems, package managers, and deployment tools
-            - Programming language design or implementation
-            - Developer productivity tools
-            
-            Answer Yes if the study focuses on tools that programmers use or tools for programming. Answer No if it's about general programming tasks, algorithms, or coding without a specific tool focus. Yes or No
+        11. **Programming Tools Related**: Is this research paper and user study task related to programming tools, development tools, or programming tool development?
+
+            **CRITERIA - Answer YES if the study involves:**
+            - Development environments (IDEs like VS Code, Eclipse, IntelliJ, Xcode)
+            - Programming assistants (AI coding tools, code completion, code generation, Copilot)
+            - Code analysis tools (linters, formatters, static analyzers, debugging tools)
+            - Development workflows (version control, git, code review, CI/CD)
+            - Programming education tools (coding tutors, programming learning platforms)
+            - Code collaboration tools (pair programming tools, shared coding environments)
+            - Build systems, package managers, deployment tools (npm, pip, Docker, etc.)
+            - Programming language design, compiler development, or language tooling
+            - Developer productivity tools (code navigation, refactoring tools, IDE plugins)
+
+            **Answer NO if the study is about:**
+            - Physical interactions (typing speed, haptic feedback, robotic control)
+            - Sensory experiences (vibration rating, olfactory design, audio production)
+            - General user interfaces without programming context (AR/VR comfort, tangible UIs)
+            - Creative content creation (meme generation, story creation, graphic design)
+            - General software usage without development focus (using apps, not building them)
+            - Perceptual studies (similarity rating, preference evaluation)
+
+            **REQUIREMENTS for YES:**
+            - Must involve actual development tools, programming environments, or coding assistance
+            - Must focus on how programmers use tools, not just general software interaction
+
+            Answer Yes or No
 
         12. **AI or LLM Related**: Is this research paper and user study task AI or LLM related? Yes or No
 
