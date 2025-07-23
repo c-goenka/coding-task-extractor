@@ -17,7 +17,7 @@ class TaskCategories(BaseModel):
     evaluation_metrics: Optional[str] = Field(default=None, description='how task success or performance was measured')
     tools_environment: Optional[str] = Field(default=None, description='specific tools, IDEs, or development environment used')
     research_focus: Optional[str] = Field(default=None, description='what specific aspect of coding behavior or performance was being studied')
-    is_programming_related: Optional[str] = Field(default=None, description='is the research paper and user study task programming related')
+    is_programming_related: Optional[str] = Field(default=None, description='is the research paper and user study task related to programming tools or programming tool development')
     is_ai_related: Optional[str] = Field(default=None, description='is the research paper and user study task AI/LLM related')
 
 
@@ -145,7 +145,18 @@ class TaskCategorizer:
 
         10. **Research Focus**: What specific aspect of coding behavior or performance was being studied? (e.g., code navigation patterns, debugging strategies, collaboration effectiveness, learning outcomes)
 
-        11. **Programming Related**: Is this research paper and user study task programming/coding related? Yes or No
+        11. **Programming Tools Related**: Is this research paper and user study task related to programming tools, development tools, or programming tool development? This includes:
+            - Development environments (IDEs, editors, debuggers)
+            - Programming assistants (AI coding tools, code completion, code generation)
+            - Code analysis tools (linters, formatters, static analyzers)
+            - Development workflows and processes
+            - Programming education tools
+            - Code collaboration and version control tools
+            - Build systems, package managers, and deployment tools
+            - Programming language design or implementation
+            - Developer productivity tools
+            
+            Answer Yes if the study focuses on tools that programmers use or tools for programming. Answer No if it's about general programming tasks, algorithms, or coding without a specific tool focus. Yes or No
 
         12. **AI or LLM Related**: Is this research paper and user study task AI or LLM related? Yes or No
 
