@@ -50,18 +50,37 @@ class TaskCategorizer:
             - Mix of backgrounds → list levels present (e.g., "Beginner, Intermediate, Expert")
             - Default to "Intermediate" if ambiguous but educational context present
 
-        3. **Programming Language**: What programming language(s) were used? Analyze the extracted context for these indicators:
+        3. **Programming Language**: What programming language(s) were used BY PARTICIPANTS in the user study? 
+        
+        **CRITICAL: Focus on participant usage, NOT tool implementation**
+        - Extract languages that PARTICIPANTS wrote, used, or interacted with during the study
+        - IGNORE languages used to build/implement the research tool or system being studied
+        - Look for phrases like "participants wrote Python code", "users programmed in Java", "subjects used JavaScript"
+        - AVOID languages mentioned only in system architecture or tool implementation sections
+        
+        Analyze the extracted context for these participant-focused indicators:
 
-            **Primary Indicators (look for these first):**
-            - File extensions: .py=Python, .js/.jsx/.ts/.tsx=JavaScript/TypeScript, .java=Java, .cpp/.c/.h=C/C++, .cs=C#, .swift=Swift, .kt=Kotlin, .rb=Ruby, .php=PHP, .go=Go, .rs=Rust, .html/.css=Web technologies
-            - Library/framework names: pandas/numpy/matplotlib/scikit-learn/tensorflow=Python, React/Angular/Vue/Node.js/Express=JavaScript, Spring/Hibernate=Java, .NET/Entity Framework=C#, SwiftUI/UIKit=Swift, Flutter=Dart, Rails=Ruby
-            - Code syntax clues: import/from statements=Python, require/import=JavaScript, import/package=Java, using=C#, #include=C/C++
-            - Tool indicators: pip/conda=Python, npm/yarn/webpack=JavaScript, gradle/maven=Java, NuGet=C#, CocoaPods/Swift Package Manager=Swift, Cargo=Rust
+            **Primary Indicators (look for PARTICIPANT usage context):**
+            - Participant task descriptions: "participants implemented in Python", "users wrote Java code", "subjects debugged C++ programs"
+            - File extensions in participant tasks: participants worked with .py=Python, .js=JavaScript, .java=Java, .cpp=C++, etc.
+            - Libraries/frameworks participants used: participants used pandas/numpy=Python, React/Angular=JavaScript, Spring=Java, etc.
+            - Code syntax participants wrote: participants wrote import/from=Python, require/import=JavaScript, using=C#, #include=C/C++
+            - Tools participants used: participants used pip/conda=Python, npm/yarn=JavaScript, gradle/maven=Java, etc.
+            - Visual Programming indicators: block-based programming, drag-and-drop interface, visual scripting, GUI-based programming environment, graphical programming language
+            - Natural Language indicators: LLM code generation, AI-assisted coding, natural language prompts, ChatGPT, Copilot, CodeT5, conversational programming, prompt-based coding
 
-            **Secondary Indicators:**
-            - Platform/IDE mentions: Xcode=Swift, Android Studio=Java/Kotlin, Visual Studio=C#/.NET, PyCharm=Python, WebStorm=JavaScript
-            - Domain patterns: Data science/ML=likely Python, Web development=likely JavaScript, iOS=Swift, Android=Java/Kotlin, Game development=C# (Unity) or C++, System programming=C/C++/Rust
-            - Build systems: npm=JavaScript, pip=Python, gradle=Java, make=C/C++, cargo=Rust
+            **Secondary Indicators (participant context):**
+            - IDEs/platforms participants used: participants used Xcode=Swift, Android Studio=Java/Kotlin, Visual Studio=C#/.NET, PyCharm=Python, etc.
+            - Domain patterns from participant tasks: participants' data science tasks=likely Python, web development tasks=likely JavaScript, etc.
+            - Build systems participants used: participants ran npm=JavaScript, pip=Python, gradle=Java, make=C/C++, cargo=Rust
+            - Visual Programming platforms participants used: Scratch, Blockly, MIT App Inventor, LabVIEW, Simulink, Unreal Blueprint, Visual Logic, Alice, Snap!, GameMaker Studio, Construct
+            - Natural Language platforms participants used: ChatGPT, GitHub Copilot, CodeT5, OpenAI Codex, Amazon CodeWhisperer, Tabnine, Replit Ghostwriter, Google Bard
+            
+            **AVOID These Implementation References:**
+            - "The system was built using Python" (system implementation, not participant usage)
+            - "Our tool was developed in Java" (research tool implementation)
+            - "The platform uses React.js" (tool architecture, not participant interaction)
+            - "Backend implemented in Node.js" (system design, not user study language)
 
             **CRITICAL - "Not Specified" Language Rule:**
             If you cannot find ANY programming language indicators (file extensions, libraries, frameworks, tools, syntax, or development context), this is a STRONG signal that the study may not be about programming tools. Re-examine the task for non-programming activities like:
@@ -70,14 +89,23 @@ class TaskCategorizer:
             - General UI evaluation (comfort rating, usability testing)
             - Creative tasks (content creation, design)
 
+            **IMPORTANT - Multiple Language Extraction:**
+            List ALL programming approaches used by participants, separated by commas. This includes combinations like:
+            - "Python, Natural Language" (if participants used both Python coding and LLM prompts)
+            - "Visual Programming (Scratch), JavaScript" (if they used both visual and text-based programming)
+            - "Natural Language, Python, Visual Programming" (if they used all three approaches)
+            
             **Inference Priority:**
             1. If multiple indicators point to same language → Use that language with confidence
-            2. If mixed indicators → List primary language first, then mention others
-            3. If domain context only → Use format "Language (inferred from domain context)"
-            4. If web-related without specifics → "JavaScript (web development context)"
-            5. If data science/ML context → "Python (data science context)"
-            6. If mobile development → "Swift (iOS) or Java/Kotlin (Android)"
-            7. Only use "Not specified" if absolutely no technical indicators exist AND you suspect it may not be programming-related
+            2. If LLM/AI code generation mentioned → Include "Natural Language" (specify tool if known, e.g., "Natural Language (ChatGPT)")
+            3. If visual/block-based programming mentioned → Include "Visual Programming" (specify platform if known, e.g., "Visual Programming (Scratch)")
+            4. If mixed indicators → List ALL languages/approaches used, separated by commas
+            5. If domain context only → Use format "Language (inferred from domain context)"
+            6. If web-related without specifics → "JavaScript (web development context)"  
+            7. If data science/ML context → "Python (data science context)"
+            8. If mobile development → "Swift (iOS) or Java/Kotlin (Android)"
+            9. Always prioritize extracting multiple approaches over single classifications
+            10. Only use "Not specified" if absolutely no technical indicators exist AND you suspect it may not be programming-related
 
         4. **Programming Domain**: Classify the coding task into one of these domains. Make educated guesses based on context:
             - Data Science/Analytics: Data manipulation, statistical analysis, machine learning, visualization, scientific computing

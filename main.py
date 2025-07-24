@@ -1,3 +1,5 @@
+from dotenv import load_dotenv
+load_dotenv()
 import pandas as pd
 import argparse
 import glob
@@ -53,10 +55,30 @@ class CodingTaskExtractor:
         self.data_processor = DataProcessor(self.config)
         self.pdf_parser = PDFParser(self.config)
         self.text_splitter = TextSplitter(self.config)
-        self.embedder = Embedder(self.config)
-        self.rag_extractor = RAGExtractor(self.config)
-        self.task_categorizer = TaskCategorizer(self.config)
         self.csv_writer = CSVWriter(self.config)
+
+        # Initialize OpenAI components lazily
+        self._embedder = None
+        self._rag_extractor = None
+        self._task_categorizer = None
+
+    @property
+    def embedder(self):
+        if self._embedder is None:
+            self._embedder = Embedder(self.config)
+        return self._embedder
+
+    @property
+    def rag_extractor(self):
+        if self._rag_extractor is None:
+            self._rag_extractor = RAGExtractor(self.config)
+        return self._rag_extractor
+
+    @property
+    def task_categorizer(self):
+        if self._task_categorizer is None:
+            self._task_categorizer = TaskCategorizer(self.config)
+        return self._task_categorizer
 
     def run_pipeline(self, csv_file_path, steps=None, force=False):
         if steps is None:
