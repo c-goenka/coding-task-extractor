@@ -2,14 +2,16 @@
 
 import pandas as pd
 from pathlib import Path
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 import sys
 import os
 
 from ..models.task_models import Paper
+from .abstract_fetcher import AbstractFetcher
+from .pdf_abstract_extractor import PDFAbstractExtractor
 
 
-def load_papers_from_csv(csv_path: str, limit: int = None, skip_no_abstracts: bool = False) -> List[Paper]:
+def load_papers_from_csv(csv_path: str, limit: int = None, skip_no_abstracts: bool = False, extract_from_pdfs: bool = False) -> List[Paper]:
     """
     Load papers from CSV file.
     
@@ -17,6 +19,7 @@ def load_papers_from_csv(csv_path: str, limit: int = None, skip_no_abstracts: bo
         csv_path: Path to CSV file with paper data
         limit: Optional limit on number of papers to load
         skip_no_abstracts: If True, skip papers without abstracts
+        extract_from_pdfs: If True, extract abstracts from PDF files
         
     Returns:
         List of Paper objects
@@ -31,7 +34,8 @@ def load_papers_from_csv(csv_path: str, limit: int = None, skip_no_abstracts: bo
         'authors': ['Author', 'authors', 'Authors'],
         'venue': ['Publication Title', 'venue', 'Venue'],
         'year': ['Publication Year', 'year', 'Year'],
-        'url': ['Url', 'url', 'URL']
+        'url': ['Url', 'url', 'URL'],
+        'pdf_path': ['File Attachments', 'pdf_path', 'file_path']
     }
     
     # Find actual column names
@@ -47,6 +51,9 @@ def load_papers_from_csv(csv_path: str, limit: int = None, skip_no_abstracts: bo
     
     # Handle abstracts
     abstract_col = actual_columns.get('abstract')
+    pdf_col = actual_columns.get('pdf_path')
+    pdf_extractor = None
+    
     if abstract_col:
         # Count missing abstracts
         missing_count = df[abstract_col].isna().sum()
@@ -58,6 +65,9 @@ def load_papers_from_csv(csv_path: str, limit: int = None, skip_no_abstracts: bo
             if skip_no_abstracts:
                 print(f"   Skipping papers without abstracts...")
                 df = df[df[abstract_col].notna() & (df[abstract_col] != '')]
+            elif extract_from_pdfs and pdf_col:
+                print(f"   📄 Will extract missing abstracts from PDF files...")
+                pdf_extractor = PDFAbstractExtractor(lines_after_abstract=25)
             else:
                 print(f"   Will use title for papers without abstracts...")
     else:
@@ -67,18 +77,40 @@ def load_papers_from_csv(csv_path: str, limit: int = None, skip_no_abstracts: bo
         df = df.head(limit)
     
     papers = []
-    for _, row in df.iterrows():
+    extracted_count = 0
+    
+    for i, (_, row) in enumerate(df.iterrows()):
         # Get abstract or use title as fallback
         abstract_text = ""
+        paper_id = str(row[actual_columns['paper_id']]) if 'paper_id' in actual_columns else f"paper_{i+1}"
+        
         if abstract_col and pd.notna(row[abstract_col]) and row[abstract_col].strip():
             abstract_text = row[abstract_col]
         else:
-            # Use title as abstract fallback
-            title_text = row[actual_columns['title']] if 'title' in actual_columns else ""
-            abstract_text = f"Title: {title_text}"  # Prefix to indicate it's a title
+            # Try to extract from PDF if enabled
+            if pdf_extractor and pdf_col:
+                pdf_path = row[pdf_col] if pd.notna(row[pdf_col]) else None
+                if pdf_path:
+                    # Handle potential multiple PDF paths (semicolon separated)
+                    pdf_paths = [p.strip() for p in str(pdf_path).split(';') if p.strip()]
+                    
+                    for pdf_file_path in pdf_paths:
+                        if os.path.exists(pdf_file_path):
+                            extracted_abstract = pdf_extractor.extract_from_pdf(pdf_file_path)
+                            if extracted_abstract:
+                                abstract_text = extracted_abstract
+                                extracted_count += 1
+                                if (extracted_count % 5 == 0):  # Progress update
+                                    print(f"   📥 Extracted {extracted_count} abstracts from PDFs...")
+                                break  # Found abstract, stop trying other PDF paths
+            
+            # If still no abstract, use title as fallback
+            if not abstract_text:
+                title_text = row[actual_columns['title']] if 'title' in actual_columns else ""
+                abstract_text = f"Title: {title_text}"  # Prefix to indicate it's a title
         
         paper = Paper(
-            paper_id=str(row[actual_columns['paper_id']]) if 'paper_id' in actual_columns else f"paper_{len(papers)+1}",
+            paper_id=paper_id,
             title=row[actual_columns['title']] if 'title' in actual_columns else "Untitled",
             authors=row[actual_columns['authors']] if 'authors' in actual_columns else "Unknown",
             venue=row[actual_columns['venue']] if 'venue' in actual_columns else "Unknown",
@@ -87,6 +119,13 @@ def load_papers_from_csv(csv_path: str, limit: int = None, skip_no_abstracts: bo
             abstract=abstract_text
         )
         papers.append(paper)
+    
+    # Report extraction results
+    if pdf_extractor:
+        print(f"   ✅ Successfully extracted {extracted_count} abstracts from PDFs")
+        if extracted_count > 0:
+            success_rate = extracted_count / missing_count * 100 if missing_count > 0 else 0
+            print(f"   📊 Extraction success rate: {success_rate:.1f}% ({extracted_count}/{missing_count})")
     
     print(f"📚 Loaded {len(papers)} papers from {csv_path}")
     return papers
@@ -152,6 +191,57 @@ def save_results_to_csv(results: List, output_path: str) -> None:
     df = pd.DataFrame(data)
     df.to_csv(output_path, index=False)
     print(f"Results saved to: {output_path}")
+
+
+def save_papers_with_abstracts_to_csv(papers: List[Paper], output_path: str) -> None:
+    """
+    Save papers with their abstracts to CSV file.
+    Useful for saving papers after fetching missing abstracts.
+    
+    Args:
+        papers: List of Paper objects
+        output_path: Path to save CSV file
+    """
+    data = []
+    
+    for paper in papers:
+        row = {
+            'paper_id': paper.paper_id,
+            'title': paper.title,
+            'authors': paper.authors,
+            'venue': paper.venue,
+            'year': paper.year,
+            'url': paper.url,
+            'abstract': paper.abstract
+        }
+        data.append(row)
+    
+    df = pd.DataFrame(data)
+    df.to_csv(output_path, index=False)
+    print(f"📁 Updated papers saved to: {output_path}")
+
+
+def extract_and_update_csv(input_csv: str, output_csv: str = None, limit: int = None) -> None:
+    """
+    Extract missing abstracts from PDFs and save updated CSV.
+    
+    Args:
+        input_csv: Input CSV file path
+        output_csv: Output CSV file path (defaults to input_csv with '_updated' suffix)
+        limit: Limit number of papers to process
+    """
+    if not output_csv:
+        # Generate output filename
+        input_path = Path(input_csv)
+        output_csv = str(input_path.parent / f"{input_path.stem}_updated{input_path.suffix}")
+    
+    print(f"📄 Extracting missing abstracts from PDFs: {input_csv}")
+    papers = load_papers_from_csv(input_csv, limit=limit, extract_from_pdfs=True)
+    
+    print(f"💾 Saving updated papers to: {output_csv}")
+    save_papers_with_abstracts_to_csv(papers, output_csv)
+    
+    print("✅ Abstract extraction complete!")
 
 
 def get_programming_papers_from_results(csv_path: str, limit: int = None) -> List[Paper]:

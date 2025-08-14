@@ -7,7 +7,7 @@ class Config:
     """Configuration class for the simplified pipeline."""
 
     # LLM Settings
-    DEFAULT_MODEL = "gpt-5-mini"
+    DEFAULT_MODEL = "gpt-4o-mini"
     DEFAULT_TEMPERATURE = 0.2
 
     # Filtering Thresholds

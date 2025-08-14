@@ -25,16 +25,16 @@ else:
 try:
     from langchain_openai import ChatOpenAI
     print("✅ LangChain import successful")
-    
+
     # Test LLM initialization
     llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.2)
     print("✅ LLM initialization successful")
-    
+
     # Test simple API call
     print("\n🤖 Testing simple API call...")
     response = llm.invoke("Say 'Hello, API test successful!' and nothing else.")
     print(f"✅ API Response: {response.content}")
-    
+
 except ImportError as e:
     print(f"❌ LangChain import failed: {e}")
 except Exception as e:
